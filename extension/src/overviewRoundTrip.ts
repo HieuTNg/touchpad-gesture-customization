@@ -1,10 +1,7 @@
 import Clutter from 'gi://Clutter';
 import Shell from 'gi://Shell';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import {
-    ControlsManager,
-    OverviewAdjustment,
-} from 'resource:///org/gnome/shell/ui/overviewControls.js';
+import {OverviewAdjustment} from 'resource:///org/gnome/shell/ui/overviewControls.js';
 import {SwipeTracker} from 'resource:///org/gnome/shell/ui/swipeTracker.js';
 import {createSwipeTracker} from './swipeTracker.js';
 import {OverviewNavigationState} from '../common/settings.js';
@@ -17,7 +14,6 @@ enum ExtensionState {
 }
 
 export class OverviewRoundTripGestureExtension implements ISubExtension {
-    private _overviewControls: ControlsManager;
     private _stateAdjustment: OverviewAdjustment;
     private _oldGetStateTransitionParams: typeof OverviewAdjustment.prototype.getStateTransitionParams;
     private _progress = 0;
@@ -32,8 +28,7 @@ export class OverviewRoundTripGestureExtension implements ISubExtension {
 
     constructor(navigationStates: OverviewNavigationState) {
         this._navigationStates = navigationStates;
-        this._overviewControls = Main.overview._overview._controls;
-        this._stateAdjustment = this._overviewControls._stateAdjustment;
+        this._stateAdjustment = Main.overview._overview._controls._stateAdjustment;
         this._oldGetStateTransitionParams =
             this._stateAdjustment.getStateTransitionParams;
         this._progress = 0;
@@ -201,6 +196,7 @@ export class OverviewRoundTripGestureExtension implements ISubExtension {
         this._progress = progress;
 
         // log(`update: progress=${progress}, overview progress=${this._getOverviewProgressValue(progress)}`);
+
         Main.overview._gestureUpdate(
             tracker,
             this._getOverviewProgressValue(progress)

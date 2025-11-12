@@ -23,6 +23,11 @@ declare module 'resource:///org/gnome/shell/ui/swipeTracker.js' {
         orientation: Clutter.Orientation;
         enabled: boolean;
         allowLongSwipes: boolean;
+        _panGesture?: Clutter.GestureAction;
+        _touchpadGesture?: TouchpadGesture;
+        _oldTouchpadGesture?: TouchpadGesture; // custom
+        _allowedModes: Shell.ActionMode;
+        _progress: number;
 
         confirmSwipe(
             distance: number,
@@ -33,15 +38,9 @@ declare module 'resource:///org/gnome/shell/ui/swipeTracker.js' {
 
         destroy(): void;
 
-        _touchGesture?: Clutter.GestureAction;
-        _touchpadGesture?: TouchpadGesture;
-        _oldTouchpadGesture?: TouchpadGesture; // custom
-        _allowedModes: Shell.ActionMode;
-        _progress: number;
+        _beginTouchpadGesture(): void;
 
-        _beginGesture(): void;
-
-        _updateGesture(): void;
+        _updateTouchpadGesture(): void;
 
         _endTouchpadGesture(): void;
 
@@ -54,6 +53,7 @@ declare module 'resource:///org/gnome/shell/ui/swipeTracker.js' {
         allowTouch?: boolean;
         allowDrag?: boolean;
         allowScroll?: boolean;
+        phase?: Clutter.EventPhase;
     };
 
     // types

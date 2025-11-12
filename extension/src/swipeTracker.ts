@@ -5,6 +5,7 @@ import {actionMode} from 'resource:///org/gnome/shell/ui/main.js';
 import {
     SwipeTracker,
     CustomEventType,
+    _SwipeTrackerOptionalParams,
 } from 'resource:///org/gnome/shell/ui/swipeTracker.js';
 import {TouchpadConstants} from '../constants.js';
 
@@ -60,11 +61,8 @@ export const TouchpadSwipeGesture = GObject.registerClass(
         private _cumulativeX = 0;
         private _cumulativeY = 0;
         private _followNaturalScroll: boolean;
-        _stageCaptureEvent = 0;
+        _stageCaptureEvent: number | null;
         SWIPE_MULTIPLIER: number;
-        TOUCHPAD_BASE_HEIGHT = TouchpadConstants.TOUCHPAD_BASE_HEIGHT;
-        TOUCHPAD_BASE_WIDTH = TouchpadConstants.TOUCHPAD_BASE_WIDTH;
-        DRAG_THRESHOLD_DISTANCE = TouchpadConstants.DRAG_THRESHOLD_DISTANCE;
         enabled = true;
         private _state = TouchpadState.NONE;
         private _toggledDirection = false;
@@ -187,7 +185,7 @@ export const TouchpadSwipeGesture = GObject.registerClass(
                 const cdy = this._cumulativeY;
                 const distance = Math.sqrt(cdx * cdx + cdy * cdy);
 
-                if (distance >= this.DRAG_THRESHOLD_DISTANCE) {
+                if (distance >= TouchpadConstants.DRAG_THRESHOLD_DISTANCE) {
                     const gestureOrientation =
                         Math.abs(cdx) > Math.abs(cdy)
                             ? Clutter.Orientation.HORIZONTAL
@@ -213,8 +211,8 @@ export const TouchpadSwipeGesture = GObject.registerClass(
                 (vertical !== this._toggledDirection ? dy : dx) *
                 this.SWIPE_MULTIPLIER;
             const distance = vertical
-                ? this.TOUCHPAD_BASE_HEIGHT
-                : this.TOUCHPAD_BASE_WIDTH;
+                ? TouchpadConstants.TOUCHPAD_BASE_HEIGHT
+                : TouchpadConstants.TOUCHPAD_BASE_WIDTH;
 
             switch (gesturePhase) {
                 case Clutter.TouchpadGesturePhase.BEGIN:
@@ -271,28 +269,12 @@ export const TouchpadSwipeGesture = GObject.registerClass(
         destroy() {
             if (this._stageCaptureEvent) {
                 global.stage.disconnect(this._stageCaptureEvent);
-                this._stageCaptureEvent = 0;
+                this._stageCaptureEvent = null;
             }
         }
     }
 );
 
-declare type _SwipeTrackerOptionalParams = {
-    allowTouch?: boolean;
-    allowDrag?: boolean;
-    allowScroll?: boolean;
-};
-
-/**
- *
- * @param actor
- * @param nfingers
- * @param allowedModes
- * @param orientation
- * @param followNaturalScroll
- * @param gestureSpeed
- * @param params
- */
 export function createSwipeTracker(
     actor: Clutter.Actor,
     nfingers: number[],
@@ -305,7 +287,8 @@ export function createSwipeTracker(
     params = params ?? {};
     params.allowDrag = params.allowDrag ?? false;
     params.allowScroll = params.allowScroll ?? false;
-    const allowTouch = params.allowTouch ?? true;
+    params.phase = params.phase ?? Clutter.EventPhase.CAPTURE;
+    const allowTouch = params.allowTouch ?? false;
     delete params.allowTouch;
 
     // create swipeTracker
@@ -317,9 +300,9 @@ export function createSwipeTracker(
     );
 
     // remove touch gestures
-    if (!allowTouch && swipeTracker._touchGesture) {
-        global.stage.remove_action(swipeTracker._touchGesture);
-        delete swipeTracker._touchGesture;
+    if (!allowTouch && swipeTracker._panGesture) {
+        global.stage.remove_action(swipeTracker._panGesture);
+        delete swipeTracker._panGesture;
     }
 
     // remove old touchpad gesture from swipeTracker
@@ -340,11 +323,11 @@ export function createSwipeTracker(
 
     swipeTracker._touchpadGesture.connect(
         'begin',
-        swipeTracker._beginGesture.bind(swipeTracker)
+        swipeTracker._beginTouchpadGesture.bind(swipeTracker)
     );
     swipeTracker._touchpadGesture.connect(
         'update',
-        swipeTracker._updateGesture.bind(swipeTracker)
+        swipeTracker._updateTouchpadGesture.bind(swipeTracker)
     );
     swipeTracker._touchpadGesture.connect(
         'end',

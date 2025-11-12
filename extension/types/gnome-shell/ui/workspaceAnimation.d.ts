@@ -20,7 +20,7 @@ declare module 'resource:///org/gnome/shell/ui/workspaceAnimation.js' {
         _switchWorkspaceEnd(
             tracker: SwipeTracker,
             duration: number,
-            progress: number
+            endProgress: number
         ): void;
 
         _movingWindow: Meta.Window;

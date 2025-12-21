@@ -70,9 +70,11 @@ class WorkspaceAnimationModifier {
 
     apply(): void {
         if (this._workspaceAnimation._swipeTracker._touchpadGesture)
-            disconnectTouchpadEventFromTracker(
-                this._workspaceAnimation._swipeTracker._touchpadGesture
-            );
+            // disconnectTouchpadEventFromTracker(
+            //     this._workspaceAnimation._swipeTracker._touchpadGesture
+            // );
+            this._workspaceAnimation._swipeTracker._touchpadGesture.enabled=false;
+
 
         this._swipeTracker.connect('begin', this._gestureBegin.bind(this));
         this._swipeTracker.connect('update', this._gestureUpdate.bind(this));
@@ -141,13 +143,12 @@ class WorkspaceAnimationModifier {
     }
 
     destroy(): void {
-        const swipeTracker = this._workspaceAnimation._swipeTracker;
-        if (swipeTracker._touchpadGesture)
-            connectTouchpadEventToTracker(swipeTracker._touchpadGesture);
+        if (this._workspaceAnimation._swipeTracker._touchpadGesture)
+            // connectTouchpadEventToTracker(this._workspaceAnimation._swipeTracker._touchpadGesture);
+            this._workspaceAnimation._swipeTracker._touchpadGesture.enabled=true;
 
         if (this._swipeTracker) {
             this._swipeTracker.destroy();
-            this._swipeTracker.enabled = false;
         }
     }
 }
@@ -161,7 +162,7 @@ export class WorkspaceSwitchingExtension implements ISubExtension {
     constructor() {
         this._stateAdjustment =
             Main.overview._overview._controls._stateAdjustment;
-        
+
         // First tracker controls workspace switching in overview
         // Second tracker controls app page switching in app grid
         this._swipeTrackers = [
@@ -247,6 +248,7 @@ export class WorkspaceSwitchingExtension implements ISubExtension {
 
             const gestureSpeed = entry.gestureSpeed ?? 1;
             const touchpadGesture = new TouchpadSwipeGesture(
+                global.stage,
                 nfingers,
                 modes,
                 swipeTracker.orientation,
@@ -266,7 +268,6 @@ export class WorkspaceSwitchingExtension implements ISubExtension {
     destroy(): void {
         this._swipeTrackers.reverse().forEach(entry => {
             const {swipeTracker, disableOldGesture} = entry;
-            swipeTracker._touchpadGesture?.destroy();
             swipeTracker._touchpadGesture = swipeTracker._oldTouchpadGesture;
             swipeTracker._oldTouchpadGesture = undefined;
             if (swipeTracker._touchpadGesture && disableOldGesture)

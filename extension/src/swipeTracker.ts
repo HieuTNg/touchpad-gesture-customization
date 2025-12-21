@@ -61,7 +61,7 @@ export const TouchpadSwipeGesture = GObject.registerClass(
         private _cumulativeX = 0;
         private _cumulativeY = 0;
         private _followNaturalScroll: boolean;
-        _stageCaptureEvent: number | null;
+        _touchpadEvent: number | null;
         SWIPE_MULTIPLIER: number;
         enabled = true;
         private _state = TouchpadState.NONE;
@@ -71,6 +71,7 @@ export const TouchpadSwipeGesture = GObject.registerClass(
         private _holdGestureCancelTime = 0;
 
         constructor(
+            actor: Clutter.Actor,
             nfingers: number[],
             allowedModes: Shell.ActionMode,
             orientation: Clutter.Orientation,
@@ -85,8 +86,8 @@ export const TouchpadSwipeGesture = GObject.registerClass(
             this._checkAllowedGesture = checkAllowedGesture;
             this._followNaturalScroll = followNaturalScroll;
 
-            this._stageCaptureEvent = global.stage.connect(
-                'captured-event::touchpad',
+            this._touchpadEvent = actor.connect(
+                'event::touchpad',
                 this._handleEvent.bind(this)
             );
 
@@ -265,13 +266,6 @@ export const TouchpadSwipeGesture = GObject.registerClass(
 
             this._toggledDirection = direction !== this.orientation;
         }
-
-        destroy() {
-            if (this._stageCaptureEvent) {
-                global.stage.disconnect(this._stageCaptureEvent);
-                this._stageCaptureEvent = null;
-            }
-        }
     }
 );
 
@@ -299,20 +293,9 @@ export function createSwipeTracker(
         params
     );
 
-    // remove touch gestures
-    if (!allowTouch && swipeTracker._panGesture) {
-        global.stage.remove_action(swipeTracker._panGesture);
-        delete swipeTracker._panGesture;
-    }
-
-    // remove old touchpad gesture from swipeTracker
-    if (swipeTracker._touchpadGesture) {
-        swipeTracker._touchpadGesture.destroy();
-        swipeTracker._touchpadGesture = undefined;
-    }
-
     // add touchpadBindings to tracker
     swipeTracker._touchpadGesture = new TouchpadSwipeGesture(
+        actor,
         nfingers,
         swipeTracker._allowedModes,
         swipeTracker.orientation,

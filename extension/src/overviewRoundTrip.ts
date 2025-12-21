@@ -28,7 +28,8 @@ export class OverviewRoundTripGestureExtension implements ISubExtension {
 
     constructor(navigationStates: OverviewNavigationState) {
         this._navigationStates = navigationStates;
-        this._stateAdjustment = Main.overview._overview._controls._stateAdjustment;
+        this._stateAdjustment =
+            Main.overview._overview._controls._stateAdjustment;
         this._oldGetStateTransitionParams =
             this._stateAdjustment.getStateTransitionParams;
         this._progress = 0;

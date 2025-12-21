@@ -4,7 +4,7 @@ declare module 'resource:///org/gnome/shell/ui/swipeTracker.js' {
     import Shell from 'gi://Shell';
 
     class TouchpadGesture extends GObject.Object {
-        destroy(): void;
+        enabled: boolean;
 
         _handleEvent(
             actor: Clutter.Actor | undefined,

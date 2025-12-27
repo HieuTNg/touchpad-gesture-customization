@@ -63,9 +63,8 @@ export default class AltTabGestureExtension implements ISubExtension {
             this._verticalTouchpadSwipeTracker?.disconnect(handle)
         );
 
-        this._verticalTouchpadSwipeTracker?.destroy();
-
         this._verticalTouchpadSwipeTracker = new TouchpadSwipeGesture(
+            global.stage,
             nfingers,
             Shell.ActionMode.ALL,
             Clutter.Orientation.VERTICAL,
@@ -95,9 +94,8 @@ export default class AltTabGestureExtension implements ISubExtension {
             this._horizontalTouchpadSwipeTracker?.disconnect(handle)
         );
 
-        this._horizontalTouchpadSwipeTracker?.destroy();
-
         this._horizontalTouchpadSwipeTracker = new TouchpadSwipeGesture(
+            global.stage,
             nfingers,
             Shell.ActionMode.ALL,
             Clutter.Orientation.HORIZONTAL,
@@ -158,7 +156,6 @@ export default class AltTabGestureExtension implements ISubExtension {
             this._verticalTouchpadSwipeTracker?.disconnect(handle)
         );
 
-        this._verticalTouchpadSwipeTracker?.destroy();
         this._verticalTouchpadSwipeTracker = undefined;
         this._verticalConnectHandlers = undefined;
 
@@ -167,7 +164,6 @@ export default class AltTabGestureExtension implements ISubExtension {
             this._horizontalTouchpadSwipeTracker?.disconnect(handle)
         );
 
-        this._horizontalTouchpadSwipeTracker?.destroy();
         this._horizontalTouchpadSwipeTracker = undefined;
         this._horizontalConnectHandlers = undefined;
 

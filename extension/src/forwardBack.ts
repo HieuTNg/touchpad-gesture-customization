@@ -3,7 +3,6 @@ import Shell from 'gi://Shell';
 import Meta from 'gi://Meta';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {SwipeTracker} from 'resource:///org/gnome/shell/ui/swipeTracker.js';
-import {ExtSettings} from '../constants.js';
 import {ArrowIconAnimation} from './animations/arrow.js';
 import {createSwipeTracker} from './swipeTracker.js';
 import {getVirtualKeyboard, IVirtualKeyboard} from './utils/keyboard.js';
@@ -22,7 +21,6 @@ enum SwipeGestureDirection {
 }
 
 const SnapPointThreshold = 0.1;
-
 export type AppForwardBackKeyBinds = Record<
     string,
     [ForwardBackKeyBinds, boolean]

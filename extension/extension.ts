@@ -1,9 +1,6 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
-import {
-    Extension,
-    ExtensionMetadata,
-} from 'resource:///org/gnome/shell/extensions/extension.js';
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import {
     AllSettingsKeys,
     PinchGestureType,
@@ -32,7 +29,8 @@ export default class TouchpadGestureCustomization extends Extension {
     private _reloadWaitId = 0;
     private _addReloadDelayFor: AllSettingsKeys[];
 
-    constructor(metadata: ExtensionMetadata) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    constructor(metadata: any) {
         super(metadata);
 
         this._extensions = [];
@@ -329,7 +327,7 @@ export default class TouchpadGestureCustomization extends Extension {
         if (this.settings.get_boolean('enable-forward-back-gesture')) {
             const appForwardBackKeyBinds: AppForwardBackKeyBinds = this.settings
                 .get_value('forward-back-application-keyboard-shortcuts')
-                .deepUnpack();
+                .deepUnpack() as AppForwardBackKeyBinds;
 
             this._extensions.push(
                 new ForwardBackGestureExtension(

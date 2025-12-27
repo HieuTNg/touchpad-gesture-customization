@@ -73,8 +73,8 @@ class WorkspaceAnimationModifier {
             // disconnectTouchpadEventFromTracker(
             //     this._workspaceAnimation._swipeTracker._touchpadGesture
             // );
-            this._workspaceAnimation._swipeTracker._touchpadGesture.enabled=false;
-
+            this._workspaceAnimation._swipeTracker._touchpadGesture.enabled =
+                false;
 
         this._swipeTracker.connect('begin', this._gestureBegin.bind(this));
         this._swipeTracker.connect('update', this._gestureUpdate.bind(this));
@@ -145,7 +145,8 @@ class WorkspaceAnimationModifier {
     destroy(): void {
         if (this._workspaceAnimation._swipeTracker._touchpadGesture)
             // connectTouchpadEventToTracker(this._workspaceAnimation._swipeTracker._touchpadGesture);
-            this._workspaceAnimation._swipeTracker._touchpadGesture.enabled=true;
+            this._workspaceAnimation._swipeTracker._touchpadGesture.enabled =
+                true;
 
         if (this._swipeTracker) {
             this._swipeTracker.destroy();

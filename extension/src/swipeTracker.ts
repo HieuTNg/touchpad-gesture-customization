@@ -266,6 +266,11 @@ export const TouchpadSwipeGesture = GObject.registerClass(
 
             this._toggledDirection = direction !== this.orientation;
         }
+
+        // Redundant, to be removed when GNOME remove this function
+        destroy() {
+            return;
+        }
     }
 );
 

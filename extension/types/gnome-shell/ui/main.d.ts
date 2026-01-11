@@ -10,6 +10,15 @@ declare module 'resource:///org/gnome/shell/ui/main.js' {
     import {WindowManager} from 'resource:///org/gnome/shell/ui/windowManager.js';
     import {WorkspaceAnimationController} from 'resource:///org/gnome/shell/ui/workspaceAnimation.js';
 
+    const brightnessManager: {
+        _globalScale: {
+            _value: number;
+            _setValue(value: number): void;
+        };
+        connect(signal: string, callback: () => void): number;
+        disconnect(id: number): void;
+    };
+
     const actionMode: Shell.ActionMode;
     export function activateWindow(
         window: Meta.Window,

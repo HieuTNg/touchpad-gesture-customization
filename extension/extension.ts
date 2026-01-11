@@ -18,9 +18,8 @@ import * as VKeyboard from './src/utils/keyboard.js';
 import {SnapWindowExtension} from './src/snapWidnow.js';
 import {ShowDesktopExtension} from './src/pinchGestures/showDesktop.js';
 import {CloseWindowExtension} from './src/pinchGestures/closeWindow.js';
-
-// import {VolumeControlGestureExtension} from './src/volumeControl.js';
-// import {BrightnessControlGestureExtension} from './src/brightnessControl.js';
+import {VolumeControlGestureExtension} from './src/volumeControl.js';
+import {BrightnessControlGestureExtension} from './src/brightnessControl.js';
 
 export default class TouchpadGestureCustomization extends Extension {
     private _extensions: ISubExtension[];
@@ -254,72 +253,72 @@ export default class TouchpadGestureCustomization extends Extension {
          * Volume Control
          */
 
-        // const verticalVolumeControlFingers = verticalSwipeToFingersMap.get(
-        //     SwipeGestureType.VOLUME_CONTROL
-        // );
-        // const horizontalVolumeControlFingers = horizontalSwipeToFingersMap.get(
-        //     SwipeGestureType.VOLUME_CONTROL
-        // );
+        const verticalVolumeControlFingers = verticalSwipeToFingersMap.get(
+            SwipeGestureType.VOLUME_CONTROL
+        );
+        const horizontalVolumeControlFingers = horizontalSwipeToFingersMap.get(
+            SwipeGestureType.VOLUME_CONTROL
+        );
 
-        // if (
-        //     verticalVolumeControlFingers?.length ||
-        //     horizontalVolumeControlFingers?.length
-        // ) {
-        //     const volumeControlGestureExtension =
-        //         new VolumeControlGestureExtension();
+        if (
+            verticalVolumeControlFingers?.length ||
+            horizontalVolumeControlFingers?.length
+        ) {
+            const volumeControlGestureExtension =
+                new VolumeControlGestureExtension();
 
-        //     // Enable vertical swipe for overview navigation
-        //     if (verticalVolumeControlFingers?.length) {
-        //         volumeControlGestureExtension.setVerticalSwipeTracker(
-        //             verticalVolumeControlFingers
-        //         );
-        //     }
+            // Enable vertical swipe for overview navigation
+            if (verticalVolumeControlFingers?.length) {
+                volumeControlGestureExtension.setVerticalSwipeTracker(
+                    verticalVolumeControlFingers
+                );
+            }
 
-        //     // Enable horizontal swipe for overview navigation
-        //     if (horizontalVolumeControlFingers?.length) {
-        //         volumeControlGestureExtension.setHorizontalSwipeTracker(
-        //             horizontalVolumeControlFingers
-        //         );
-        //     }
+            // Enable horizontal swipe for overview navigation
+            if (horizontalVolumeControlFingers?.length) {
+                volumeControlGestureExtension.setHorizontalSwipeTracker(
+                    horizontalVolumeControlFingers
+                );
+            }
 
-        //     this._extensions.push(volumeControlGestureExtension);
-        // }
+            this._extensions.push(volumeControlGestureExtension);
+        }
 
-        // /**
-        //  * Brightness Control
-        //  */
+        /**
+         * Brightness Control
+         */
 
-        // const verticalBrightnessControlFingers = verticalSwipeToFingersMap.get(
-        //     SwipeGestureType.BRIGHTNESS_CONTROL
-        // );
-        // const horizontalBrightnessControlFingers =
-        //     horizontalSwipeToFingersMap.get(
-        //         SwipeGestureType.BRIGHTNESS_CONTROL
-        //     );
+        const verticalBrightnessControlFingers = verticalSwipeToFingersMap.get(
+            SwipeGestureType.BRIGHTNESS_CONTROL
+        );
+        const horizontalBrightnessControlFingers =
+            horizontalSwipeToFingersMap.get(
+                SwipeGestureType.BRIGHTNESS_CONTROL
+            );
 
-        // if (
-        //     verticalBrightnessControlFingers?.length ||
-        //     horizontalBrightnessControlFingers?.length
-        // ) {
-        //     const brightnessControlGestureExtension =
-        //         new BrightnessControlGestureExtension();
+        if (
+            verticalBrightnessControlFingers?.length ||
+            horizontalBrightnessControlFingers?.length
+        ) {
+            const brightnessControlGestureExtension =
+                new BrightnessControlGestureExtension();
 
-        //     // Enable vertical swipe for overview navigation
-        //     if (verticalBrightnessControlFingers?.length) {
-        //         brightnessControlGestureExtension.setVerticalSwipeTracker(
-        //             verticalBrightnessControlFingers
-        //         );
-        //     }
+            // Enable vertical swipe for overview navigation
+            if (verticalBrightnessControlFingers?.length) {
+                brightnessControlGestureExtension.setVerticalSwipeTracker(
+                    verticalBrightnessControlFingers
+                );
+            }
 
-        //     // Enable horizontal swipe for overview navigation
-        //     if (horizontalBrightnessControlFingers?.length) {
-        //         brightnessControlGestureExtension.setHorizontalSwipeTracker(
-        //             horizontalBrightnessControlFingers
-        //         );
-        //     }
+            // Enable horizontal swipe for overview navigation
+            if (horizontalBrightnessControlFingers?.length) {
+                brightnessControlGestureExtension.setHorizontalSwipeTracker(
+                    horizontalBrightnessControlFingers
+                );
+            }
 
-        //     this._extensions.push(brightnessControlGestureExtension);
-        // }
+            this._extensions.push(brightnessControlGestureExtension);
+        }
 
         /**
          * App Gestures

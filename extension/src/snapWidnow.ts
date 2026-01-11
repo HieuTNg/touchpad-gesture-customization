@@ -129,14 +129,12 @@ const TilePreview = GObject.registerClass(
                             case GestureMaxUnMaxState.UNMAXIMIZE:
                                 if (this._window.is_fullscreen())
                                     this._window.unmake_fullscreen();
-                                this._window.unmaximize(
-                                    Meta.MaximizeFlags.BOTH
-                                );
+                                this._window.unmaximize();
                                 break;
                             case GestureMaxUnMaxState.MAXIMIZE:
                                 if (this._window.is_fullscreen())
                                     this._window.unmake_fullscreen();
-                                this._window.maximize(Meta.MaximizeFlags.BOTH);
+                                this._window.maximize();
                                 break;
                             case GestureMaxUnMaxState.FULLSCREEN:
                                 this._window.make_fullscreen();
@@ -260,8 +258,7 @@ const TilePreview = GObject.registerClass(
 
         private getNormalBox(window: Meta.Window) {
             const normalBox = window.get_frame_rect();
-            if (window.get_maximized() !== Meta.MaximizeFlags.BOTH)
-                return normalBox;
+            if (!window.is_maximized()) return normalBox;
 
             const [width, height] = [
                 Math.round(normalBox.width * 0.05),
@@ -379,7 +376,7 @@ export class SnapWindowExtension implements ISubExtension {
 
         const progress = window.is_fullscreen()
             ? GestureMaxUnMaxState.FULLSCREEN
-            : window.get_maximized() === Meta.MaximizeFlags.BOTH
+            : window.is_maximized()
               ? GestureMaxUnMaxState.MAXIMIZE
               : GestureMaxUnMaxState.UNMAXIMIZE;
 

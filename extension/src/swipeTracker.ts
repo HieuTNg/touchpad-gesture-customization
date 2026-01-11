@@ -300,10 +300,10 @@ export function createSwipeTracker(
     );
 
     // remove touch gestures
-    if (!allowTouch && swipeTracker._panGesture) {
-        global.stage.remove_action(swipeTracker._panGesture);
-        delete swipeTracker._panGesture;
-    }
+    // if (!allowTouch && swipeTracker._panGesture) {
+    //     global.stage.remove_action(swipeTracker._panGesture);
+    //     delete swipeTracker._panGesture;
+    // }
 
     // remove old touchpad gesture from swipeTracker
     if (swipeTracker._touchpadGesture) {

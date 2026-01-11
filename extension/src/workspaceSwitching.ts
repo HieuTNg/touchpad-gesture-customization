@@ -161,7 +161,7 @@ export class WorkspaceSwitchingExtension implements ISubExtension {
     constructor() {
         this._stateAdjustment =
             Main.overview._overview._controls._stateAdjustment;
-        
+
         // First tracker controls workspace switching in overview
         // Second tracker controls app page switching in app grid
         this._swipeTrackers = [

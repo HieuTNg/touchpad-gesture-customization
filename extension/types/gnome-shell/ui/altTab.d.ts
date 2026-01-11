@@ -9,7 +9,9 @@ declare module 'resource:///org/gnome/shell/ui/altTab.js' {
                 window: Meta.Window;
             }[];
         _switcherList: St.Widget & {
-            _scrollView: St.ScrollView;
+            _scrollView: St.ScrollView & {
+                hscroll: St.ScrollBar;
+            };
         };
         _noModsTimeoutId: number;
         _initialDelayTimeoutId: number;

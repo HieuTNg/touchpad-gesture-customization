@@ -72,11 +72,11 @@ declare module 'resource:///org/gnome/shell/ui/main.js' {
     };
 
     const osdWindowManager: {
-        show(
-            monitor: number,
+        showAll(
             icon: Gio.Icon,
             label: string | null,
-            percentage: number
+            level: number,
+            maxlevel: number
         ): void;
         hideAll(): void;
     };

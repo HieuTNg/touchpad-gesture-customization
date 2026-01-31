@@ -115,12 +115,11 @@ export class BrightnessControlGestureExtension implements ISubExtension {
 
         this._lastOsdShowTimestamp = nowTimestamp;
 
-        const percentage = brightness / 100;
+        const level = brightness / 100;
 
-        const monitor = -1; // Display volume window on all monitors
         const icon = Gio.Icon.new_for_string('display-brightness-symbolic');
 
-        Main.osdWindowManager.show(monitor, icon, null, percentage);
+        Main.osdWindowManager.showAll(icon, null, level, 1);
     }
 
     // Read current global brightness as 0..100

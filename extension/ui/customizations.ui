@@ -11,6 +11,13 @@
         </items>
     </object>
 
+    <object class="GtkStringList" id="workspace_switching_states_model">
+        <items>
+            <item translatable="yes">Default</item>
+            <item translatable="yes">Cyclic</item>
+        </items>
+    </object>
+
     <object class="AdwPreferencesPage" id="customizations_page">
         <property name="title">Misc</property>
         <property name="icon-name">emblem-system-symbolic</property>
@@ -24,8 +31,6 @@
                 <child>
                     <object class="AdwActionRow">
                         <property name="title" translatable="yes">Touchpad swipe speed</property>
-                        <property name="subtitle">Make the action triggered by a swipe gesture happen faster or slower</property>
-
                         <child>
                             <object class="GtkScale" id="touchpad-speed-scale">
                                 <property name="width-request">100</property>
@@ -64,8 +69,6 @@
                 <child>
                     <object class="AdwActionRow">
                         <property name="title" translatable="yes">Touchpad pinch speed</property>
-                        <property name="subtitle">Make the action triggered by a pinch gesture happen faster or slower</property>
-
                         <child>
                             <object class="GtkScale" id="touchpad-pinch-speed">
                                 <property name="width-request">100</property>
@@ -104,8 +107,6 @@
                 <child>
                     <object class="AdwActionRow">
                         <property name="title" translatable="yes">Volume control speed</property>
-                        <property name="subtitle">Adjust the rate of change for volume control by swipe gesture</property>
-
                         <child>
                             <object class="GtkScale" id="volume-control-speed">
                                 <property name="width-request">100</property>
@@ -143,8 +144,6 @@
                 <child>
                     <object class="AdwActionRow">
                         <property name="title" translatable="yes">Brightness control speed</property>
-                        <property name="subtitle">Adjust the rate of change for brightness control by swipe gesture</property>
-
                         <child>
                             <object class="GtkScale" id="brightness-control-speed">
                                 <property name="width-request">100</property>
@@ -195,7 +194,6 @@
                 <child>
                     <object class="AdwActionRow">
                         <property name="title" translatable="yes">Revert direction of overview navigation gesture</property>
-                        <property name="subtitle">Swipe down instead of swipe up for overview </property>
                         <child>
                             <object class="GtkSwitch" id="default-overview-gesture-direction">
                                 <property name="valign">center</property>
@@ -263,8 +261,15 @@
                 <child>
                     <object class="AdwComboRow" id="overview-navigation-states">
                         <property name="title" translatable="yes">Overview navigation states</property>
-                        <property name="subtitle">Customize vertical swipe for overview and app-grid navigation</property>
                         <property name="model">overview_navigation_states_model</property>
+                    </object>
+                </child>
+
+                <!-- workspace switching states -->
+                <child>
+                    <object class="AdwComboRow" id="workspace-switching-states">
+                        <property name="title" translatable="yes">Workspace switching states</property>
+                        <property name="model">workspace_switching_states_model</property>
                     </object>
                 </child>
 

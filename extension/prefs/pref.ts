@@ -162,6 +162,7 @@ function bindPrefsSettings(builder: GtkBuilder, settings: Gio.Settings) {
     bind_combo_box('pinch-3-finger-gesture', settings, builder);
     bind_combo_box('pinch-4-finger-gesture', settings, builder);
     bind_combo_box('overview-navigation-states', settings, builder);
+    bind_combo_box('workspace-switching-states', settings, builder);
 }
 
 /**

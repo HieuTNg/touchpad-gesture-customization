@@ -140,20 +140,28 @@ export default class TouchpadGestureCustomization extends Extension {
             );
 
         const gestureExtension = new WorkspaceSwitchingExtension();
+        const workspaceSwitchingState = this.settings.get_enum(
+            'workspace-switching-states'
+        );
 
         // Disable default workspace navigation using horizontal swipe
-        gestureExtension.setHorizontalWorkspaceAnimationModifier([]);
+        gestureExtension.setHorizontalWorkspaceAnimationModifier(
+            [],
+            workspaceSwitchingState
+        );
 
         // Enable vertical swipe for workspace navigation
         if (verticalWorkspaceNavigationFingers?.length)
             gestureExtension.setVerticalWorkspceAnimationModifier(
-                verticalWorkspaceNavigationFingers
+                verticalWorkspaceNavigationFingers,
+                workspaceSwitchingState
             );
 
         // Enable horizontal swipe for workspace navigation
         if (horizontalWorkspaceNavigationFingers?.length)
             gestureExtension.setHorizontalWorkspaceAnimationModifier(
-                horizontalWorkspaceNavigationFingers
+                horizontalWorkspaceNavigationFingers,
+                workspaceSwitchingState
             );
 
         this._extensions.push(gestureExtension);

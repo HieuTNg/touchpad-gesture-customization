@@ -11,6 +11,7 @@ import {OverviewAdjustment} from 'resource:///org/gnome/shell/ui/overviewControl
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {ExtSettings, OverviewControlsState} from '../constants.js';
 import {createSwipeTracker, TouchpadSwipeGesture} from './swipeTracker.js';
+import {WorkspaceSwitchingState} from '../common/settings.js';
 
 interface ShallowSwipeTracker {
     orientation: Clutter.Orientation;
@@ -51,8 +52,11 @@ class WorkspaceAnimationModifier {
     private _lastVal = 0;
     private _workspaceAnimation: WorkspaceAnimationController;
     private _swipeTracker: SwipeTracker;
+    private _progress = 0;
+    private _workspaceSwitchingStates: WorkspaceSwitchingState;
 
     constructor(
+        workspaceSwitchingStates: WorkspaceSwitchingState,
         nfingers: number[],
         wm: typeof Main.wm,
         orientation?: Clutter.Orientation
@@ -66,6 +70,8 @@ class WorkspaceAnimationModifier {
             ExtSettings.FOLLOW_NATURAL_SCROLL,
             1
         );
+
+        this._workspaceSwitchingStates = workspaceSwitchingStates;
     }
 
     apply(): void {
@@ -94,6 +100,7 @@ class WorkspaceAnimationModifier {
         else if (progress > this._lastVal)
             progress = this._lastVal + (progress - this._lastVal) * 0.05;
 
+        this._progress = progress;
         this._workspaceAnimation._switchWorkspaceUpdate(tracker, progress);
     }
 
@@ -102,7 +109,32 @@ class WorkspaceAnimationModifier {
         duration: number,
         progress: number
     ): void {
-        progress = Math.clamp(progress, this._firstVal, this._lastVal);
+        switch (this._workspaceSwitchingStates) {
+            case WorkspaceSwitchingState.CYCLIC:
+                if (this._progress < this._firstVal) {
+                    progress =
+                        progress >= this._firstVal
+                            ? this._firstVal
+                            : this._lastVal;
+                } else if (this._progress > this._lastVal) {
+                    progress =
+                        progress <= this._lastVal
+                            ? this._lastVal
+                            : this._firstVal;
+                } else {
+                    progress = Math.clamp(
+                        progress,
+                        this._firstVal,
+                        this._lastVal
+                    );
+                }
+
+                break;
+            case WorkspaceSwitchingState.DEFAULT:
+                progress = Math.clamp(progress, this._firstVal, this._lastVal);
+                break;
+        }
+
         this._workspaceAnimation._switchWorkspaceEnd(
             tracker,
             duration,
@@ -213,18 +245,26 @@ export class WorkspaceSwitchingExtension implements ISubExtension {
         ];
     }
 
-    setVerticalWorkspceAnimationModifier(nfingers: number[]) {
+    setVerticalWorkspceAnimationModifier(
+        nfingers: number[],
+        workspaceSwitchingState: WorkspaceSwitchingState
+    ) {
         this._verticalWorkspaceAnimationModifier =
             new WorkspaceAnimationModifier(
+                workspaceSwitchingState,
                 nfingers,
                 Main.wm,
                 Clutter.Orientation.VERTICAL
             );
     }
 
-    setHorizontalWorkspaceAnimationModifier(nfingers: number[]) {
+    setHorizontalWorkspaceAnimationModifier(
+        nfingers: number[],
+        workspaceSwitchingState: WorkspaceSwitchingState
+    ) {
         this._horizontalWorkspaceAnimationModifier =
             new WorkspaceAnimationModifier(
+                workspaceSwitchingState,
                 nfingers,
                 Main.wm,
                 Clutter.Orientation.HORIZONTAL

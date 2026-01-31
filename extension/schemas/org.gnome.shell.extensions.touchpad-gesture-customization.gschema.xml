@@ -11,6 +11,10 @@
     <value value='1' nick='GNOME' />
     <value value='2' nick='WINDOW_PICKER_ONLY' />
   </enum>
+  <enum id='org.gnome.shell.extensions.touchpad-gesture-customization.workspace-switching-states'>
+    <value value='0' nick='DEFAULT' />
+    <value value='1' nick='CYCLIC' />
+  </enum>
   <enum id='org.gnome.shell.extensions.touchpad-gesture-customization.vertical-swipe-gestures'>
     <value value='0' nick='NONE' />
     <value value='1' nick='OVERVIEW_NAVIGATION' />
@@ -62,11 +66,11 @@
     </key>
     <key name='invert-volume-gesture-direction' type='b'>
       <default>true</default>
-      <description>Whether to invert volume control gesture direction</description>
+      <description>Invert volume control gesture direction</description>
     </key>
     <key name='invert-brightness-gesture-direction' type='b'>
       <default>true</default>
-      <description>Whether to invert brightness control gesture direction</description>
+      <description>Invert brightness control gesture direction</description>
     </key>
     <key name='enable-forward-back-gesture' type='b'>
       <default>false</default>
@@ -78,11 +82,11 @@
     </key>
     <key name="pinch-3-finger-gesture" enum="org.gnome.shell.extensions.touchpad-gesture-customization.pinch-gestures">
       <default>'CLOSE_DOCUMENT'</default>
-      <description>Gesture for 3 finger pinch</description>
+      <description>Gesture action for 3 finger pinch</description>
     </key>
     <key name="pinch-4-finger-gesture" enum="org.gnome.shell.extensions.touchpad-gesture-customization.pinch-gestures">
       <default>'CLOSE_WINDOW'</default>
-      <description>Gesture for 4 finger pinch</description>
+      <description>Gesture action for 4 finger pinch</description>
     </key>
     <key name="vertical-swipe-3-fingers-gesture" enum="org.gnome.shell.extensions.touchpad-gesture-customization.vertical-swipe-gestures">
       <default>'OVERVIEW_NAVIGATION'</default>
@@ -101,8 +105,12 @@
       <description>Gesture action for 4-fingers horizontal swipe</description>
     </key>
     <key name="overview-navigation-states" enum="org.gnome.shell.extensions.touchpad-gesture-customization.overview-navigation-states">
-      <default>'WINDOW_PICKER_ONLY'</default>
-      <description>Customization for overview and app-grid navigation using vertical swipe</description>
+      <default>'CYCLIC'</default>
+      <description>Customization for overview and app-grid navigation mode</description>
+    </key>
+    <key name="workspace-switching-states" enum="org.gnome.shell.extensions.touchpad-gesture-customization.workspace-switching-states">
+      <default>'DEFAULT'</default>
+      <description>Customization for workspace switching mode</description>
     </key>
     <!--
       0 -> Default

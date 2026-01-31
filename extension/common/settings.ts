@@ -24,6 +24,11 @@ export enum OverviewNavigationState {
     WINDOW_PICKER_ONLY = 2,
 }
 
+export enum WorkspaceSwitchingState {
+    DEFAULT = 0,
+    CYCLIC = 1,
+}
+
 export enum ForwardBackKeyBinds {
     Default = 0,
     'Forward/Backward' = 1,
@@ -57,7 +62,8 @@ export type EnumSettingsKeys =
     | 'horizontal-swipe-4-fingers-gesture'
     | 'pinch-3-finger-gesture'
     | 'pinch-4-finger-gesture'
-    | 'overview-navigation-states';
+    | 'overview-navigation-states'
+    | 'workspace-switching-states';
 
 export type MiscSettingsKeys = 'forward-back-application-keyboard-shortcuts';
 
@@ -94,7 +100,8 @@ type SettingsEnumFunctions = Enum_Functions<
         'pinch-3-finger-gesture' | 'pinch-4-finger-gesture',
         PinchGestureType
     > &
-    Enum_Functions<'overview-navigation-states', OverviewNavigationState>;
+    Enum_Functions<'overview-navigation-states', OverviewNavigationState> &
+    Enum_Functions<'workspace-switching-states', WorkspaceSwitchingState>;
 
 type Misc_Functions<K extends MiscSettingsKeys, T extends string> = {
     get_value(key: K): GLib.Variant<T>;

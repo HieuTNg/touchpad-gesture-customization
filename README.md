@@ -1,4 +1,4 @@
-# Touchpad Gesture Customization <img src="logo.svg" alt="Logo" width="75 " height="75">
+# Touchpad Gesture Customization <img src="logo.svg" alt="Logo" width="75 " height="75" align="right">
 
 This extension modifies and extends existing touchpad gestures on GNOME using Wayland. This project is a fork of [gnome-gesture-improvements](https://github.com/harshadgavali/gnome-gesture-improvements). Since the original project seems to be no longer maintained, I setup this project with the aim of taking over the development and maintenance of this wonderful extension that I relied on for daily use.
 

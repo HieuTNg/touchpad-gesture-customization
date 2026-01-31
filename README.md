@@ -1,8 +1,10 @@
-# Touchpad Gesture Customization
+# Touchpad Gesture Customization <img src="logo.svg" alt="Logo" width="75 " height="75">
 
 This extension modifies and extends existing touchpad gestures on GNOME using Wayland. This project is a fork of [gnome-gesture-improvements](https://github.com/harshadgavali/gnome-gesture-improvements). Since the original project seems to be no longer maintained, I setup this project with the aim of taking over the development and maintenance of this wonderful extension that I relied on for daily use.
 
-**Note**: I have removed the support for X11 since I only use Wayland, but this can be added again in the future if needed and if someone is willing to support this.
+**Note**:
+- I have removed the support for X11 since I only use Wayland, but this can be added again in the future if needed and if someone is willing to support this.
+- There is a bug in GNOME 49 which break the extension, you have to upgrade to GNOME 49.3 or compile it from source for the extension to work again.
 
 ## Installation
 
@@ -92,6 +94,8 @@ gsettings set org.gnome.shell.window-switcher current-workspace-only false
 # Acknowledgement
 
 Massive thanks to the original author and everyone who has contributed to the original project to bring us this wonderful GNOME extension.
+
+[gnome-gesture-improvements](https://github.com/harshadgavali/gnome-gesture-improvements) - Original GNOME Gesture Improvement
 
 [Screen Brightness Governor](https://github.com/inbalboa/gnome-brightness-governor) - brightness control code.
 

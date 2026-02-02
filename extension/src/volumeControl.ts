@@ -13,6 +13,7 @@ const VolumeIcons = [
     'audio-volume-low-symbolic',
     'audio-volume-medium-symbolic',
     'audio-volume-high-symbolic',
+    'audio-volume-overamplified-symbolic', // Added: Icon for overamplification (> 100%)
 ];
 
 export class VolumeControlGestureExtension implements ISubExtension {
@@ -25,11 +26,18 @@ export class VolumeControlGestureExtension implements ISubExtension {
     private _maxVolume!: number;
     private _sinkChangeBinding!: number;
     private _lastOsdShowTimestamp: number = 0;
+    private _audioSettings!: Gio.Settings; // Added: Settings object to track GNOME sound preferences
+    private _maxVolumeLimitRatio: number = 1.0; // Added: Dynamic ratio to handle overamplification state
 
     apply() {
         this._controller = Volume.getMixerControl();
 
         this._maxVolume = this._controller.get_vol_max_norm();
+
+        // Initializing GNOME sound settings to check for overamplification toggle
+        this._audioSettings = new Gio.Settings({
+            schema_id: 'org.gnome.desktop.sound',
+        });
 
         this._sink = this._controller.get_default_sink();
         this._sinkChangeBinding = this._controller.connect(
@@ -42,6 +50,9 @@ export class VolumeControlGestureExtension implements ISubExtension {
         this._controller?.disconnect(this._sinkChangeBinding);
         delete this._controller;
         delete this._sink;
+
+        // @ts-expect-error: audioSettings is a private property that needs cleanup
+        delete this._audioSettings; // Cleanup settings object
 
         this._verticalConnectHandlers?.forEach(handle =>
             this._verticalSwipeTracker?.disconnect(handle)
@@ -124,27 +135,51 @@ export class VolumeControlGestureExtension implements ISubExtension {
 
         this._lastOsdShowTimestamp = nowTimestamp;
 
-        const percentage = volume / this._maxVolume;
-        const iconIndex =
-            volume === 0 ? 0 : Math.clamp(Math.floor(3 * percentage + 1), 1, 3);
+        const level = volume / this._maxVolume;
+
+        // Logic to select the correct icon, including the overamplified one
+        let iconIndex: number;
+
+        if (volume === 0) {
+            iconIndex = 0;
+        } else if (level > 1.0) {
+            iconIndex = 4; // Use overamplified icon
+        } else {
+            iconIndex = Math.clamp(Math.floor(3 * level + 1), 1, 3);
+        }
 
         const monitor = -1; // Display volume window on all monitors
         const icon = Gio.Icon.new_for_string(VolumeIcons[iconIndex]);
         const label = this._sink?.get_port().human_port ?? '';
 
-        Main.osdWindowManager.show(monitor, icon, label, percentage);
+        Main.osdWindowManager.show(
+            monitor,
+            icon,
+            label,
+            level
+        );
     }
 
     _gestureBegin(_tracker: SwipeTracker): void {
-        if (this._sink === undefined) {
+        if (this._sink === undefined || this._controller === undefined) {
             return;
         }
 
+        // Check if "Overamplification" is enabled in GNOME Settings
+        const isOverampEnabled = this._audioSettings.get_boolean(
+            'allow-volume-above-100-percent'
+        );
+
+        // Calculate the actual multiplier: 1.0 if disabled, usually ~1.5 if enabled
+        this._maxVolumeLimitRatio = isOverampEnabled
+            ? this._controller.get_vol_max_amplified() / this._maxVolume
+            : 1.0;
+
         _tracker.confirmSwipe(
             global.screen_height,
-            [0, 1], // no snapping is needed as volume change is continuous, but this will automatically clamp progress to [0, 1]
+            [0, this._maxVolumeLimitRatio], // Set the dynamic swipe range based on overamplification state
             this._sink.volume / this._maxVolume, // current normalized volume
-            0 // can be whatever
+            0
         );
     }
 

@@ -6,7 +6,6 @@ This extension modifies and extends existing touchpad gestures on GNOME using Wa
 
 **Note**:
 - I have removed the support for X11 since I only use Wayland, but this can be added again in the future if needed and if someone is willing to support this.
-- There is a bug in GNOME 49 which break the extension, you have to upgrade to GNOME 49.3 or compile it from source for the extension to work again.
 
 ## Installation
 

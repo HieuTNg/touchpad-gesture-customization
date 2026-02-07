@@ -11,7 +11,7 @@ import {
 } from './common/settings.js';
 import * as Constants from './constants.js';
 import {OverviewRoundTripGestureExtension} from './src/overviewRoundTrip.js';
-import {GestureExtension} from './src/gestures.js';
+import {WorkspaceSwitchingExtension} from './src/workspaceSwitching.js';
 import AltTabGestureExtension from './src/altTab.js';
 import {
     ForwardBackGestureExtension,

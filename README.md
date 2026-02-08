@@ -5,6 +5,7 @@
 This extension modifies and extends existing touchpad gestures on GNOME using Wayland. This project is a fork of [gnome-gesture-improvements](https://github.com/harshadgavali/gnome-gesture-improvements). Since the original project seems to be no longer maintained, I setup this project with the aim of taking over the development and maintenance of this wonderful extension that I relied on for daily use.
 
 **Note**:
+- ```main``` branch contains latest changes which may not work on older version of GNOME, please choose the correct branch if install from source. 
 - I have removed the support for X11 since I only use Wayland, but this can be added again in the future if needed and if someone is willing to support this.
 - There is a bug in GNOME 49 which break the extension, you have to upgrade to GNOME 49.3 or compile it from source for the extension to work again.
 
@@ -17,6 +18,8 @@ This extension modifies and extends existing touchpad gestures on GNOME using Wa
 </a>
 
 ### Manually
+
+**Note**: Please choose correct branch for your corresponding version of GNOME first. 
 
 1. Install extension
 

@@ -150,17 +150,8 @@ export class VolumeControlGestureExtension implements ISubExtension {
 
         const icon = Gio.Icon.new_for_string(VolumeIcons[iconIndex]);
         const label = this._sink?.get_port().human_port ?? ''; // Recovered label logic
-        const monitor = -1; // Standard for "all monitors"
 
-        // Use .show() instead of .showAll() to ensure compatibility with GNOME 46
-        // @ts-expect-error: Main.osdWindowManager.show exists in GNOME Shell but might be missing in local type definitions
-        Main.osdWindowManager.show(
-            monitor,
-            icon,
-            label,
-            level,
-            this._maxVolumeLimitRatio
-        );
+        Main.osdWindowManager.showAll(icon, label, level, this._maxVolumeLimitRatio);
     }
 
     _gestureBegin(_tracker: SwipeTracker): void {

@@ -174,8 +174,22 @@ export class ForwardBackGestureExtension implements ISubExtension {
         ];
         const workArea = this._getWorkArea();
 
-        if (progress > AnimationState.DEFAULT) {
-            this._animationState = AnimationState.RIGHT;
+        // Check if the focused app has the reverse flag set
+        const focusApp = this._windowTracker.focus_app as Shell.App | null;
+        const keyBind = focusApp
+            ? this._appForwardBackKeyBinds[focusApp.get_id()]
+            : null;
+        const isReversed = keyBind ? keyBind[1] : false;
+
+        const goingRight = progress > AnimationState.DEFAULT;
+        this._animationState = goingRight
+            ? AnimationState.RIGHT
+            : AnimationState.LEFT;
+
+        // When reversed, invert the arrow visual
+        const showLeftArrow = goingRight !== isReversed;
+
+        if (showLeftArrow) {
             this._arrowIconAnimation.gestureBegin(
                 'arrow1-left-symbolic.svg',
                 true
@@ -185,7 +199,6 @@ export class ForwardBackGestureExtension implements ISubExtension {
                 workArea.y + Math.round((workArea.height - height) / 2)
             );
         } else {
-            this._animationState = AnimationState.LEFT;
             this._arrowIconAnimation.gestureBegin(
                 'arrow1-right-symbolic.svg',
                 false

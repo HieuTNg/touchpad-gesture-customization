@@ -151,7 +151,12 @@ export class VolumeControlGestureExtension implements ISubExtension {
         const icon = Gio.Icon.new_for_string(VolumeIcons[iconIndex]);
         const label = this._sink?.get_port().human_port ?? ''; // Recovered label logic
 
-        Main.osdWindowManager.showAll(icon, label, level, this._maxVolumeLimitRatio);
+        Main.osdWindowManager.showAll(
+            icon,
+            label,
+            level,
+            this._maxVolumeLimitRatio
+        );
     }
 
     _gestureBegin(_tracker: SwipeTracker): void {

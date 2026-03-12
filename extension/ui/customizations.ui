@@ -257,6 +257,20 @@
                     </object>
                 </child>
 
+                <!-- Fullscreen window -->
+                <child>
+                    <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Fullscreen window</property>
+                        <property name="subtitle">Fullscreen the window if its already maximized</property>
+                        <child>
+                            <object class="GtkSwitch" id="allow-fullscreen-window">
+                                <property name="valign">center</property>
+                                <property name="active">True</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
                 <!-- Overview navigation states -->
                 <child>
                     <object class="AdwComboRow" id="overview-navigation-states">

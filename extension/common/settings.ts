@@ -40,6 +40,7 @@ export enum ForwardBackKeyBinds {
 
 export type BooleanSettingsKeys =
     | 'allow-minimize-window'
+    | 'allow-fullscreen-window'
     | 'follow-natural-scroll'
     | 'invert-volume-gesture-direction'
     | 'invert-brightness-gesture-direction'

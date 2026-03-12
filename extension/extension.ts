@@ -18,6 +18,7 @@ import * as VKeyboard from './src/utils/keyboard.js';
 import {SnapWindowExtension} from './src/snapWidnow.js';
 import {ShowDesktopExtension} from './src/pinchGestures/showDesktop.js';
 import {CloseWindowExtension} from './src/pinchGestures/closeWindow.js';
+import {ShowNotificationListExtension} from './src/pinchGestures/showNotificationList';
 import {VolumeControlGestureExtension} from './src/volumeControl.js';
 import {BrightnessControlGestureExtension} from './src/brightnessControl.js';
 
@@ -235,6 +236,17 @@ export default class TouchpadGestureCustomization extends Extension {
                 new CloseWindowExtension(
                     closeDocumentFingers,
                     PinchGestureType.CLOSE_DOCUMENT
+                )
+            );
+
+		// pinch to show notification list
+		const showNotificationListFingers = pinchToFingersMap.get(
+            PinchGestureType.SHOW_NOTIFICATION_LIST
+        );
+		if (showNotificationListFingers?.length)
+			this._extensions.push(
+                new ShowNotificationListExtension(
+                    showNotificationListFingers,
                 )
             );
 

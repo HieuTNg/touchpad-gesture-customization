@@ -9,6 +9,7 @@
             <item translatable="yes">Show Desktop</item>
             <item translatable="yes">Close Window</item>
             <item translatable="yes">Close Tab (Ctrl + W)</item>
+            <item translatable="yes">Show notification list</item>
         </items>
     </object>
 

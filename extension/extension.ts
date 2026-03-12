@@ -424,6 +424,8 @@ export default class TouchpadGestureCustomization extends Extension {
         if (this.settings) {
             Constants.ExtSettings.ALLOW_MINIMIZE_WINDOW =
                 this.settings.get_boolean('allow-minimize-window');
+            Constants.ExtSettings.ALLOW_FULLSCREEN_WINDOW =
+                this.settings.get_boolean('allow-fullscreen-window');
             Constants.ExtSettings.FOLLOW_NATURAL_SCROLL =
                 this.settings.get_boolean('follow-natural-scroll');
             Constants.ExtSettings.DEFAULT_OVERVIEW_GESTURE_DIRECTION =

@@ -402,6 +402,7 @@ export class SnapWindowExtension implements ISubExtension {
                     GestureMaxUnMaxState.MAXIMIZE
                 );
                 if (
+                    ExtSettings.ALLOW_FULLSCREEN_WINDOW &&
                     !window.is_monitor_sized() &&
                     !monitorArea.equal(window.get_buffer_rect())
                 )

@@ -21,7 +21,7 @@ import * as VKeyboard from './src/utils/keyboard.js';
 import {SnapWindowExtension} from './src/snapWindow.js';
 import {ShowDesktopExtension} from './src/pinchGestures/showDesktop.js';
 import {CloseWindowExtension} from './src/pinchGestures/closeWindow.js';
-import {ShowNotificationListExtension} from './src/pinchGestures/showNotificationList';
+import {ShowNotificationListExtension} from './src/pinchGestures/showNotificationList.js';
 import {VolumeControlGestureExtension} from './src/volumeControl.js';
 import {BrightnessControlGestureExtension} from './src/brightnessControl.js';
 

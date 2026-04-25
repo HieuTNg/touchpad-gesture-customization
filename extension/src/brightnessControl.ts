@@ -140,7 +140,9 @@ export class BrightnessControlGestureExtension implements ISubExtension {
 
     _gestureBegin(_tracker: SwipeTracker): void {
         _tracker.confirmSwipe(
-            global.screen_height,
+            global.display.get_monitor_geometry(
+                global.display.get_current_monitor()
+            ).height,
             [0, 100], // no snapping is needed as brightness change is continuous, but this will automatically clamp progress to [0, 100]
             this._brightness, // current brightness
             0 // can be whatever

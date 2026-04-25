@@ -271,6 +271,34 @@
                     </object>
                 </child>
 
+                <!-- Enable 2-finger horizontal navigation -->
+                <child>
+                    <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Enable 2-finger horizontal navigation</property>
+                        <property name="subtitle">Swipe left/right with 2 fingers to go Back/Forward (Alt+Left/Right) in browsers and file managers</property>
+                        <child>
+                            <object class="GtkSwitch" id="enable-two-finger-nav">
+                                <property name="valign">center</property>
+                                <property name="active">False</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <!-- Reverse 2-finger nav direction -->
+                <child>
+                    <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Reverse 2-finger navigation direction</property>
+                        <property name="subtitle">Swap the Back/Forward direction for natural scrolling preference</property>
+                        <child>
+                            <object class="GtkSwitch" id="reverse-two-finger-nav-direction">
+                                <property name="valign">center</property>
+                                <property name="active">False</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
                 <!-- Overview navigation states -->
                 <child>
                     <object class="AdwComboRow" id="overview-navigation-states">

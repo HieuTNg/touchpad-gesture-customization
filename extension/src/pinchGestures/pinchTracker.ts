@@ -103,7 +103,7 @@ export const TouchpadPinchGesture = GObject.registerClass(
             this._allowedModes = params.allowedModes;
             this._checkAllowedGesture = params.checkAllowedGesture;
             this._stageCaptureEvent = global.stage.connect(
-                'captured-event::touchpad',
+                'captured-event',
                 this._handleEvent.bind(this)
             );
 

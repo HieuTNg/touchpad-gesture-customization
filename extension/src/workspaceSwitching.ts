@@ -36,7 +36,7 @@ declare interface ShellSwipeTracker {
 function connectTouchpadEventToTracker(touchpadGesture: TouchpadGesture) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global.stage as any).connectObject(
-        'captured-event::touchpad',
+        'captured-event',
         touchpadGesture._handleEvent.bind(touchpadGesture),
         touchpadGesture
     );
@@ -245,17 +245,20 @@ export class WorkspaceSwitchingExtension implements ISubExtension {
         ];
     }
 
-    setVerticalWorkspceAnimationModifier(
+    setVerticalWorkspaceAnimationModifier(
         nfingers: number[],
-        workspaceSwitchingState: WorkspaceSwitchingState
+        workspaceSwitchingStates: WorkspaceSwitchingState
     ) {
+        this._verticalWorkspaceAnimationModifier?.destroy();
+
         this._verticalWorkspaceAnimationModifier =
             new WorkspaceAnimationModifier(
-                workspaceSwitchingState,
+                workspaceSwitchingStates,
                 nfingers,
                 Main.wm,
                 Clutter.Orientation.VERTICAL
             );
+        this._verticalWorkspaceAnimationModifier.apply();
     }
 
     setHorizontalWorkspaceAnimationModifier(

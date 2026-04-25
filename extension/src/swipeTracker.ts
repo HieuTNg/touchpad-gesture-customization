@@ -86,7 +86,7 @@ export const TouchpadSwipeGesture = GObject.registerClass(
             this._followNaturalScroll = followNaturalScroll;
 
             this._stageCaptureEvent = global.stage.connect(
-                'captured-event::touchpad',
+                'captured-event',
                 this._handleEvent.bind(this)
             );
 

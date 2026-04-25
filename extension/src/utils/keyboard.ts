@@ -8,27 +8,37 @@ class VirtualKeyboard {
     private _virtualDevice: Clutter.VirtualInputDevice;
 
     constructor() {
-        const seat = Clutter.get_default_backend().get_default_seat();
+        // In modern GNOME (46+), the seat is best retrieved from the backend directly
+        const backend = Clutter.get_default_backend();
+        const seat = backend.get_default_seat();
+
         this._virtualDevice = seat.create_virtual_device(
             Clutter.InputDeviceType.KEYBOARD_DEVICE
         );
     }
 
+    /**
+     * Injects a sequence of key presses and releases.
+     * Use for injecting combinations like Alt + Left.
+     */
     sendKeys(keys: number[]) {
-        // log(`sending keys: ${keys}`);
-
         const keyEvents: [number, Clutter.KeyState][] = [];
+
+        // Build the sequence: Alt Down, Left Down, Left Up, Alt Up
         keys.forEach(key => keyEvents.push([key, Clutter.KeyState.RELEASED]));
-        keys.reverse().forEach(key =>
-            keyEvents.push([key, Clutter.KeyState.PRESSED])
-        );
+        [...keys]
+            .reverse()
+            .forEach(key => keyEvents.push([key, Clutter.KeyState.PRESSED]));
 
         let timeoutId = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT,
             DELAY_BETWEEN_KEY_PRESS,
             () => {
                 const keyEvent = keyEvents.pop();
-                if (keyEvent !== undefined) this._sendKey(...keyEvent);
+
+                if (keyEvent !== undefined) {
+                    this._sendKey(...keyEvent);
+                }
 
                 if (keyEvents.length === 0) {
                     timeoutIds.delete(timeoutId);
@@ -44,11 +54,14 @@ class VirtualKeyboard {
     }
 
     private _sendKey(keyval: number, keyState: Clutter.KeyState) {
-        this._virtualDevice.notify_keyval(
-            Clutter.get_current_event_time() * 1000,
-            keyval,
-            keyState
-        );
+        if (!this._virtualDevice) return;
+
+        /**
+         * Monotonic time is required for Wayland validation.
+         * Many Mutter versions expect milliseconds (not microseconds) for notify_keyval.
+         */
+        const timeMs = GLib.get_monotonic_time() / 1000;
+        this._virtualDevice.notify_keyval(timeMs, keyval, keyState);
     }
 }
 

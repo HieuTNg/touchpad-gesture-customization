@@ -6,6 +6,10 @@
     <value value='2' nick='CLOSE_WINDOW' />
     <value value='3' nick='CLOSE_DOCUMENT' />
     <value value='4' nick='SHOW_NOTIFICATION_LIST' />
+    <value value='5' nick='WINDOW_MANIPULATION' />
+    <value value='6' nick='WINDOW_SWITCHING' />
+    <value value='7' nick='MAXIMIZE_WINDOW' />
+    <value value='8' nick='MINIMIZE_ALL_WINDOWS' />
   </enum>
   <enum id='org.gnome.shell.extensions.touchpad-gesture-customization.overview-navigation-states'>
     <value value='0' nick='CYCLIC' />
@@ -24,6 +28,11 @@
     <value value='4' nick='VOLUME_CONTROL' />
     <value value='5' nick='BRIGHTNESS_CONTROL' />
     <value value='6' nick='WINDOW_MANIPULATION' />
+    <value value='7' nick='SHOW_DESKTOP' />
+    <value value='8' nick='MAXIMIZE_WINDOW' />
+    <value value='9' nick='MINIMIZE_ALL_WINDOWS' />
+    <value value='10' nick='CLOSE_WINDOW' />
+    <value value='11' nick='CLOSE_DOCUMENT' />
   </enum>
   <enum id='org.gnome.shell.extensions.touchpad-gesture-customization.horizontal-swipe-gestures'>
     <value value='0' nick='NONE' />
@@ -32,6 +41,11 @@
     <value value='3' nick='WINDOW_SWITCHING' />
     <value value='4' nick='VOLUME_CONTROL' />
     <value value='5' nick='BRIGHTNESS_CONTROL' />
+    <value value='6' nick='SHOW_DESKTOP' />
+    <value value='8' nick='MAXIMIZE_WINDOW' />
+    <value value='9' nick='MINIMIZE_ALL_WINDOWS' />
+    <value value='10' nick='CLOSE_WINDOW' />
+    <value value='11' nick='CLOSE_DOCUMENT' />
   </enum>
   <schema id="org.gnome.shell.extensions.touchpad-gesture-customization" path="/org/gnome/shell/extensions/touchpad-gesture-customization/">
     <!-- See also: https://docs.gtk.org/glib/gvariant-format-strings.html -->
@@ -85,6 +99,14 @@
       <default>false</default>
       <description>Enable vertical swipe for app gesture</description>
     </key>
+    <key name='enable-two-finger-nav' type='b'>
+      <default>false</default>
+      <description>Enable 2-finger horizontal swipe for browser back/forward and file manager navigation (Alt+Left / Alt+Right)</description>
+    </key>
+    <key name='reverse-two-finger-nav-direction' type='b'>
+      <default>false</default>
+      <description>Reverse the direction of the 2-finger navigation swipe</description>
+    </key>
     <key name="pinch-3-finger-gesture" enum="org.gnome.shell.extensions.touchpad-gesture-customization.pinch-gestures">
       <default>'CLOSE_DOCUMENT'</default>
       <description>Gesture action for 3 finger pinch</description>
@@ -94,7 +116,7 @@
       <description>Gesture action for 4 finger pinch</description>
     </key>
     <key name="vertical-swipe-3-fingers-gesture" enum="org.gnome.shell.extensions.touchpad-gesture-customization.vertical-swipe-gestures">
-      <default>'OVERVIEW_NAVIGATION'</default>
+      <default>'SHOW_DESKTOP'</default>
       <description>Gesture action for 3-fingers vertical swipe</description>
     </key>
     <key name="horizontal-swipe-3-fingers-gesture" enum="org.gnome.shell.extensions.touchpad-gesture-customization.horizontal-swipe-gestures">

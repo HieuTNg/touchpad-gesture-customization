@@ -15,12 +15,21 @@ import {
     type AppForwardBackKeyBinds,
 } from './src/forwardBack.js';
 import * as VKeyboard from './src/utils/keyboard.js';
-import {SnapWindowExtension} from './src/snapWidnow.js';
-import {ShowDesktopExtension} from './src/pinchGestures/showDesktop.js';
+import {SnapWindowExtension} from './src/snapWindow.js';
+import {
+    ShowDesktopPinchExtension,
+    ShowDesktopSwipeExtension,
+} from './src/showDesktop.js';
 import {CloseWindowExtension} from './src/pinchGestures/closeWindow.js';
 import {ShowNotificationListExtension} from './src/pinchGestures/showNotificationList.js';
 import {VolumeControlGestureExtension} from './src/volumeControl.js';
 import {BrightnessControlGestureExtension} from './src/brightnessControl.js';
+import {MaximizeWindowExtension} from './src/maximize.js';
+import {MinimizeAllWindowsExtension} from './src/minimizeAll.js';
+import {CloseWindowSwipeExtension} from './src/closeWindowSwipe.js';
+import {TwoFingerNavExtension} from './src/twoFingerNav.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import Clutter from 'gi://Clutter';
 
 export default class TouchpadGestureCustomization extends Extension {
     private _extensions: ISubExtension[];
@@ -44,12 +53,19 @@ export default class TouchpadGestureCustomization extends Extension {
     }
 
     enable() {
-        this.settings = this.getSettings();
-        this._settingChangedId = this.settings.connect(
-            'changed',
-            this.reload.bind(this)
-        );
-        this._enable();
+        try {
+            log('[TouchpadGesture] STARTING ENABLE V3.0');
+            Main.notify('Touchpad Customizer: Activating V3.0');
+            this.settings = this.getSettings();
+            this._settingChangedId = this.settings.connect(
+                'changed',
+                this.reload.bind(this)
+            );
+            this._enable();
+        } catch (e) {
+            log(`[TouchpadGesture] ENABLE CRASH: ${e}`);
+            Main.notify(`Extension Error: ${e}`);
+        }
     }
 
     disable() {
@@ -103,29 +119,29 @@ export default class TouchpadGestureCustomization extends Extension {
                 SwipeGestureType.OVERVIEW_NAVIGATION
             );
 
-        const overviewRoundTripGesterExtension =
+        const overviewRoundTripGestureExtension =
             new OverviewRoundTripGestureExtension(
                 this.settings.get_enum('overview-navigation-states')
             );
 
         // By default, disable overview navigation when user doesn't assign any gestures
-        overviewRoundTripGesterExtension.setVerticalSwipeTracker([]);
+        overviewRoundTripGestureExtension.setVerticalSwipeTracker([]);
 
         // Enable vertical swipe for overview navigation
         if (verticalOverviewNavigationFingers?.length) {
-            overviewRoundTripGesterExtension.setVerticalSwipeTracker(
+            overviewRoundTripGestureExtension.setVerticalSwipeTracker(
                 verticalOverviewNavigationFingers
             );
         }
 
         // Enable horizontal swipe for overview navigation
         if (horizontalOverviewNavigationFingers?.length) {
-            overviewRoundTripGesterExtension?.setHorizontalSwipeTracker(
+            overviewRoundTripGestureExtension?.setHorizontalSwipeTracker(
                 horizontalOverviewNavigationFingers
             );
         }
 
-        this._extensions.push(overviewRoundTripGesterExtension);
+        this._extensions.push(overviewRoundTripGestureExtension);
 
         /**
          * Workspace navigation
@@ -153,7 +169,7 @@ export default class TouchpadGestureCustomization extends Extension {
 
         // Enable vertical swipe for workspace navigation
         if (verticalWorkspaceNavigationFingers?.length)
-            gestureExtension.setVerticalWorkspceAnimationModifier(
+            gestureExtension.setVerticalWorkspaceAnimationModifier(
                 verticalWorkspaceNavigationFingers,
                 workspaceSwitchingState
             );
@@ -212,7 +228,32 @@ export default class TouchpadGestureCustomization extends Extension {
         );
 
         if (showDesktopFingers?.length) {
-            this._extensions.push(new ShowDesktopExtension(showDesktopFingers));
+            this._extensions.push(
+                new ShowDesktopPinchExtension(showDesktopFingers)
+            );
+        }
+
+        /**
+         * Show Desktop (Swipe)
+         */
+
+        const verticalShowDesktopFingers = verticalSwipeToFingersMap.get(
+            SwipeGestureType.SHOW_DESKTOP
+        );
+        const horizontalShowDesktopFingers = horizontalSwipeToFingersMap.get(
+            SwipeGestureType.SHOW_DESKTOP
+        );
+
+        if (
+            verticalShowDesktopFingers?.length ||
+            horizontalShowDesktopFingers?.length
+        ) {
+            this._extensions.push(
+                new ShowDesktopSwipeExtension(
+                    verticalShowDesktopFingers ?? [],
+                    horizontalShowDesktopFingers ?? []
+                )
+            );
         }
 
         // pinch to close window
@@ -239,15 +280,13 @@ export default class TouchpadGestureCustomization extends Extension {
                 )
             );
 
-		// pinch to show notification list
-		const showNotificationListFingers = pinchToFingersMap.get(
+        // pinch to show notification list
+        const showNotificationListFingers = pinchToFingersMap.get(
             PinchGestureType.SHOW_NOTIFICATION_LIST
         );
-		if (showNotificationListFingers?.length)
-			this._extensions.push(
-                new ShowNotificationListExtension(
-                    showNotificationListFingers,
-                )
+        if (showNotificationListFingers?.length)
+            this._extensions.push(
+                new ShowNotificationListExtension(showNotificationListFingers)
             );
 
         // TODO: consider having an option for 'hold and swipe gestures' that can either
@@ -355,6 +394,133 @@ export default class TouchpadGestureCustomization extends Extension {
                     this.settings.get_boolean('enable-vertical-app-gesture')
                 )
             );
+        }
+
+        /**
+         * Maximize Window
+         */
+        const verticalMaximizeFingers = verticalSwipeToFingersMap.get(
+            SwipeGestureType.MAXIMIZE_WINDOW
+        );
+
+        if (verticalMaximizeFingers?.length) {
+            this._extensions.push(
+                new MaximizeWindowExtension(
+                    verticalMaximizeFingers,
+                    Clutter.Orientation.VERTICAL
+                )
+            );
+        }
+
+        const horizontalMaximizeFingers = horizontalSwipeToFingersMap.get(
+            SwipeGestureType.MAXIMIZE_WINDOW
+        );
+
+        if (horizontalMaximizeFingers?.length) {
+            this._extensions.push(
+                new MaximizeWindowExtension(
+                    horizontalMaximizeFingers,
+                    Clutter.Orientation.HORIZONTAL
+                )
+            );
+        }
+
+        /**
+         * Minimize All Windows
+         */
+        const verticalMinimizeAllFingers = verticalSwipeToFingersMap.get(
+            SwipeGestureType.MINIMIZE_ALL_WINDOWS
+        );
+
+        if (verticalMinimizeAllFingers?.length) {
+            this._extensions.push(
+                new MinimizeAllWindowsExtension(
+                    verticalMinimizeAllFingers,
+                    Clutter.Orientation.VERTICAL
+                )
+            );
+        }
+
+        const horizontalMinimizeAllFingers = horizontalSwipeToFingersMap.get(
+            SwipeGestureType.MINIMIZE_ALL_WINDOWS
+        );
+
+        if (horizontalMinimizeAllFingers?.length) {
+            this._extensions.push(
+                new MinimizeAllWindowsExtension(
+                    horizontalMinimizeAllFingers,
+                    Clutter.Orientation.HORIZONTAL
+                )
+            );
+        }
+
+        /**
+         * Close Window / Document (Swipe)
+         */
+        const verticalCloseWindowFingers = verticalSwipeToFingersMap.get(
+            SwipeGestureType.CLOSE_WINDOW
+        );
+
+        if (verticalCloseWindowFingers?.length) {
+            this._extensions.push(
+                new CloseWindowSwipeExtension(
+                    verticalCloseWindowFingers,
+                    Clutter.Orientation.VERTICAL,
+                    SwipeGestureType.CLOSE_WINDOW
+                )
+            );
+        }
+
+        const horizontalCloseWindowFingers = horizontalSwipeToFingersMap.get(
+            SwipeGestureType.CLOSE_WINDOW
+        );
+
+        if (horizontalCloseWindowFingers?.length) {
+            this._extensions.push(
+                new CloseWindowSwipeExtension(
+                    horizontalCloseWindowFingers,
+                    Clutter.Orientation.HORIZONTAL,
+                    SwipeGestureType.CLOSE_WINDOW
+                )
+            );
+        }
+
+        const verticalCloseDocFingers = verticalSwipeToFingersMap.get(
+            SwipeGestureType.CLOSE_DOCUMENT
+        );
+
+        if (verticalCloseDocFingers?.length) {
+            this._extensions.push(
+                new CloseWindowSwipeExtension(
+                    verticalCloseDocFingers,
+                    Clutter.Orientation.VERTICAL,
+                    SwipeGestureType.CLOSE_DOCUMENT
+                )
+            );
+        }
+
+        const horizontalCloseDocFingers = horizontalSwipeToFingersMap.get(
+            SwipeGestureType.CLOSE_DOCUMENT
+        );
+
+        if (horizontalCloseDocFingers?.length) {
+            this._extensions.push(
+                new CloseWindowSwipeExtension(
+                    horizontalCloseDocFingers,
+                    Clutter.Orientation.HORIZONTAL,
+                    SwipeGestureType.CLOSE_DOCUMENT
+                )
+            );
+        }
+
+        /**
+         * Two-Finger Horizontal Navigation (Alt+Left / Alt+Right)
+         */
+        if (this.settings.get_boolean('enable-two-finger-nav')) {
+            const reverseDirection = this.settings.get_boolean(
+                'reverse-two-finger-nav-direction'
+            );
+            this._extensions.push(new TwoFingerNavExtension(reverseDirection));
         }
 
         this._extensions.forEach(extension => extension.apply?.());

@@ -295,10 +295,10 @@ export class SnapWindowExtension implements ISubExtension {
     private _allowChangeDirection = false;
     private _uiGroupAddedActorId: number;
 
-    constructor(nfingerss: number[]) {
+    constructor(nfingers: number[]) {
         this._swipeTracker = createSwipeTracker(
             global.stage,
-            nfingerss,
+            nfingers,
             Shell.ActionMode.NORMAL,
             Clutter.Orientation.VERTICAL,
             true,
@@ -358,7 +358,19 @@ export class SnapWindowExtension implements ISubExtension {
         tracker: typeof SwipeTracker.prototype,
         monitor: number
     ): void {
-        const window = global.display.get_focus_window() as Meta.Window | null;
+        let window = global.display.get_focus_window() as Meta.Window | null;
+
+        if (!window) {
+            const workspace = global.workspace_manager.get_active_workspace();
+            const windows = workspace.list_windows();
+            window = windows.find(w => w.has_focus()) || null;
+            if (!window && windows.length > 0) window = windows[0];
+        }
+
+        // Ignore desktop icons
+        if (window && window.get_window_type() === Meta.WindowType.DESKTOP) {
+            window = null;
+        }
 
         // fullscreen window's can't be maximized :O
         // if window can't be maximized and window is not fullscreen, return

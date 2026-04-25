@@ -175,7 +175,9 @@ export class VolumeControlGestureExtension implements ISubExtension {
             : 1.0;
 
         _tracker.confirmSwipe(
-            global.screen_height,
+            global.display.get_monitor_geometry(
+                global.display.get_current_monitor()
+            ).height,
             [0, this._maxVolumeLimitRatio], // Set the dynamic swipe range based on overamplification state
             this._sink.volume / this._maxVolume, // current normalized volume
             0

@@ -1,5 +1,9 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@girs/*": ["./node_modules/@girs/*"]
+        },
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
         "outDir": "./build",
@@ -9,10 +13,11 @@
         "lib": [
             "ES2021"
         ],
+        "skipLibCheck": true
     },
     "include": [
         "ambient.d.ts",
         "extension/**/*.ts",
-        "extension/**/*.js",
-    ],
+        "extension/**/*.js"
+    ]
 }

@@ -6,6 +6,11 @@
     "url": "https://github.com/HieuTNg/touchpad-gesture-customization",
     "settings-schema": "org.gnome.shell.extensions.touchpad-gesture-customization",
     "shell-version": [
-        "49"
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50"
     ]
 }

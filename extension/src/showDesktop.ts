@@ -4,8 +4,10 @@ import Meta from 'gi://Meta';
 import Shell from 'gi://Shell';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {lerp} from 'resource:///org/gnome/shell/misc/util.js';
-import {TouchpadPinchGesture} from './pinchTracker.js';
-import {easeActor} from '../utils/environment.js';
+import {TouchpadPinchGesture} from './pinchGestures/pinchTracker.js';
+import {createSwipeTracker} from './swipeTracker.js';
+import {SwipeTracker} from 'resource:///org/gnome/shell/ui/swipeTracker.js';
+import {easeActor} from './utils/environment.js';
 import {
     MonitorConstraint,
     Monitor,
@@ -261,32 +263,22 @@ class MonitorGroup {
     }
 }
 
-export class ShowDesktopExtension implements ISubExtension {
-    private _windows = new Set<Meta.Window>();
-    private _workspace?: Meta.Workspace;
-    private _workspaceChangedId = 0;
-    private _windowAddedId = 0;
-    private _windowRemovedId = 0;
-    private _windowUnMinimizedId = 0;
-    private _monitorChangedId = 0;
-    private _extensionState = ExtensionState.DEFAULT;
-    private _minimizingWindows: Meta.Window[] = [];
-    private _workspaceManagerState = WorkspaceManagerState.DEFAULT;
-    private _monitorGroups: MonitorGroup[] = [];
-    private _pinchTracker: Type_TouchpadPinchGesture;
+export class BaseShowDesktopExtension implements ISubExtension {
+    protected _windows = new Set<Meta.Window>();
+    protected _workspace?: Meta.Workspace;
+    protected _workspaceChangedId = 0;
+    protected _windowAddedId = 0;
+    protected _windowRemovedId = 0;
+    protected _windowUnMinimizedId = 0;
+    protected _monitorChangedId = 0;
+    protected _extensionState = ExtensionState.DEFAULT;
+    protected _minimizingWindows: Meta.Window[] = [];
+    protected _workspaceManagerState = WorkspaceManagerState.DEFAULT;
+    protected _monitorGroups: MonitorGroup[] = [];
 
-    constructor(nfingers: number[]) {
-        this._pinchTracker = new TouchpadPinchGesture({
-            nfingers: nfingers,
-            allowedModes: Shell.ActionMode.NORMAL,
-        });
-    }
+    constructor() {}
 
     apply(): void {
-        this._pinchTracker.connect('begin', this.gestureBegin.bind(this));
-        this._pinchTracker.connect('update', this.gestureUpdate.bind(this));
-        this._pinchTracker.connect('end', this.gestureEnd.bind(this));
-
         for (const monitor of Main.layoutManager.monitors)
             this._monitorGroups.push(new MonitorGroup(monitor));
 
@@ -312,8 +304,6 @@ export class ShowDesktopExtension implements ISubExtension {
     }
 
     destroy(): void {
-        this._pinchTracker?.destroy();
-
         if (this._monitorChangedId)
             Main.layoutManager.disconnect(this._monitorChangedId);
 
@@ -358,7 +348,7 @@ export class ShowDesktopExtension implements ISubExtension {
         return this._minimizingWindows;
     }
 
-    gestureBegin(tracker: Type_TouchpadPinchGesture) {
+    gestureBegin() {
         this._extensionState = ExtensionState.ANIMATING;
 
         this._minimizingWindows = this._getMinimizableWindows();
@@ -377,20 +367,16 @@ export class ShowDesktopExtension implements ISubExtension {
             monitor.gestureBegin(windowActors);
         }
 
-        tracker.confirmPinch(
-            1,
-            [WorkspaceManagerState.DEFAULT, WorkspaceManagerState.SHOW_DESKTOP],
-            this._workspaceManagerState
-        );
+        // The tracker specific logic is handled in the child class
     }
 
-    gestureUpdate(_tracker: unknown, progress: number) {
+    gestureUpdate(progress: number) {
         // progress 0 -> NORMAL state, 1 -> SHOW Desktop
         for (const monitor of this._monitorGroups)
             monitor.gestureUpdate(progress);
     }
 
-    gestureEnd(_tracker: unknown, duration: number, endProgress: number) {
+    gestureEnd(duration: number, endProgress: number) {
         // endProgress 0 -> NORMAL state, 1 -> SHOW Desktop
         for (const monitor of this._monitorGroups)
             monitor.gestureEnd(endProgress, duration);
@@ -475,5 +461,159 @@ export class ShowDesktopExtension implements ISubExtension {
 
         this._minimizingWindows = [];
         this._workspaceManagerState = WorkspaceManagerState.DEFAULT;
+    }
+}
+
+export class ShowDesktopPinchExtension extends BaseShowDesktopExtension {
+    private _pinchTracker: Type_TouchpadPinchGesture;
+
+    constructor(nfingers: number[]) {
+        super();
+        this._pinchTracker = new TouchpadPinchGesture({
+            nfingers: nfingers,
+            allowedModes: Shell.ActionMode.NORMAL,
+        });
+    }
+
+    apply(): void {
+        super.apply();
+        this._pinchTracker.connect('begin', this._onBegin.bind(this));
+        this._pinchTracker.connect('update', this._onUpdate.bind(this));
+        this._pinchTracker.connect('end', this._onEnd.bind(this));
+    }
+
+    destroy(): void {
+        super.destroy();
+        this._pinchTracker?.destroy();
+    }
+
+    private _onBegin(tracker: Type_TouchpadPinchGesture) {
+        this.gestureBegin();
+        tracker.confirmPinch(
+            1,
+            [WorkspaceManagerState.DEFAULT, WorkspaceManagerState.SHOW_DESKTOP],
+            this._workspaceManagerState
+        );
+    }
+
+    private _onUpdate(_tracker: unknown, progress: number) {
+        this.gestureUpdate(progress);
+    }
+
+    private _onEnd(_tracker: unknown, duration: number, endProgress: number) {
+        this.gestureEnd(duration, endProgress);
+    }
+}
+
+export class ShowDesktopSwipeExtension extends BaseShowDesktopExtension {
+    private _verticalSwipeTracker?: SwipeTracker;
+    private _horizontalSwipeTracker?: SwipeTracker;
+    private _verticalConnectHandlers?: number[];
+    private _horizontalConnectHandlers?: number[];
+    private _nfingersVertical: number[];
+    private _nfingersHorizontal: number[];
+
+    constructor(nfingersVertical: number[], nfingersHorizontal: number[]) {
+        super();
+        this._nfingersVertical = nfingersVertical;
+        this._nfingersHorizontal = nfingersHorizontal;
+    }
+
+    apply(): void {
+        super.apply();
+
+        if (this._nfingersVertical.length) {
+            this._verticalSwipeTracker = createSwipeTracker(
+                global.stage,
+                this._nfingersVertical,
+                Shell.ActionMode.NORMAL,
+                Clutter.Orientation.VERTICAL,
+                false,
+                1.0,
+                {allowTouch: false}
+            );
+
+            this._verticalConnectHandlers = [
+                this._verticalSwipeTracker.connect(
+                    'begin',
+                    this._onBegin.bind(this)
+                ),
+                this._verticalSwipeTracker.connect(
+                    'update',
+                    this._onUpdate.bind(this)
+                ),
+                this._verticalSwipeTracker.connect(
+                    'end',
+                    this._onEnd.bind(this)
+                ),
+            ];
+        }
+
+        if (this._nfingersHorizontal.length) {
+            this._horizontalSwipeTracker = createSwipeTracker(
+                global.stage,
+                this._nfingersHorizontal,
+                Shell.ActionMode.NORMAL,
+                Clutter.Orientation.HORIZONTAL,
+                true,
+                1.0,
+                {allowTouch: false}
+            );
+
+            this._horizontalConnectHandlers = [
+                this._horizontalSwipeTracker.connect(
+                    'begin',
+                    this._onBegin.bind(this)
+                ),
+                this._horizontalSwipeTracker.connect(
+                    'update',
+                    this._onUpdate.bind(this)
+                ),
+                this._horizontalSwipeTracker.connect(
+                    'end',
+                    this._onEnd.bind(this)
+                ),
+            ];
+        }
+    }
+
+    destroy(): void {
+        super.destroy();
+
+        this._verticalConnectHandlers?.forEach(handle =>
+            this._verticalSwipeTracker?.disconnect(handle)
+        );
+        this._verticalConnectHandlers = undefined;
+        this._verticalSwipeTracker?.destroy();
+
+        this._horizontalConnectHandlers?.forEach(handle =>
+            this._horizontalSwipeTracker?.disconnect(handle)
+        );
+        this._horizontalConnectHandlers = undefined;
+        this._horizontalSwipeTracker?.destroy();
+    }
+
+    private _onBegin(tracker: SwipeTracker) {
+        this.gestureBegin();
+        tracker.confirmSwipe(
+            global.display.get_monitor_geometry(
+                global.display.get_current_monitor()
+            ).height,
+            [WorkspaceManagerState.DEFAULT, WorkspaceManagerState.SHOW_DESKTOP],
+            this._workspaceManagerState,
+            0
+        );
+    }
+
+    private _onUpdate(_tracker: SwipeTracker, progress: number) {
+        this.gestureUpdate(progress);
+    }
+
+    private _onEnd(
+        _tracker: SwipeTracker,
+        duration: number,
+        endProgress: number
+    ) {
+        this.gestureEnd(duration, endProgress);
     }
 }

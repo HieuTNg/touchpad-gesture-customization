@@ -87,7 +87,9 @@ export class ForwardBackGestureExtension implements ISubExtension {
         if (!this._focusWindow) return;
         this._animationState = AnimationState.WAITING;
         _tracker.confirmSwipe(
-            global.screen_width,
+            global.display.get_monitor_geometry(
+                global.display.get_current_monitor()
+            ).width,
             [AnimationState.LEFT, AnimationState.DEFAULT, AnimationState.RIGHT],
             AnimationState.DEFAULT,
             AnimationState.DEFAULT

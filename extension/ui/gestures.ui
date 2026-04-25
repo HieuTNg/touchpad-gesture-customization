@@ -10,6 +10,10 @@
             <item translatable="yes">Close Window</item>
             <item translatable="yes">Close Tab (Ctrl + W)</item>
             <item translatable="yes">Show notification list</item>
+            <item translatable="yes">Window Manipulation</item>
+            <item translatable="yes">Window Switching</item>
+            <item translatable="yes">Maximize Window</item>
+            <item translatable="yes">Minimize All Windows</item>
         </items>
     </object>
 
@@ -22,6 +26,11 @@
             <item translatable="yes">Volume Control</item>
             <item translatable="yes">Brightness Control</item>
             <item translatable="yes">Window Manipulation</item>
+            <item translatable="yes">Show Desktop</item>
+            <item translatable="yes">Maximize Window</item>
+            <item translatable="yes">Minimize All Windows</item>
+            <item translatable="yes">Close Window</item>
+            <item translatable="yes">Close Tab (Ctrl + W)</item>
         </items>
     </object>
 
@@ -33,6 +42,11 @@
             <item translatable="yes">Window Switching</item>
             <item translatable="yes">Volume Control</item>
             <item translatable="yes">Brightness Control</item>
+            <item translatable="yes">Show Desktop</item>
+            <item translatable="yes">Maximize Window</item>
+            <item translatable="yes">Minimize All Windows</item>
+            <item translatable="yes">Close Window</item>
+            <item translatable="yes">Close Tab (Ctrl + W)</item>
         </items>
     </object>
 

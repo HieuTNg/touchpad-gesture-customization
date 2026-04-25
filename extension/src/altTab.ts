@@ -191,8 +191,13 @@ export default class AltTabGestureExtension implements ISubExtension {
             if (nelement > 1) {
                 const n = getIndexForProgress(this._adjustment.value, nelement);
                 this._switcher._select(n);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const scrollView: any =
+                    this._switcher._switcherList._scrollView;
                 const adjustment =
-                    this._switcher._switcherList._scrollView.hscroll.adjustment;
+                    scrollView.hadjustment ||
+                    scrollView.hscrollbar?.adjustment ||
+                    scrollView.hscroll?.adjustment;
                 const transition = adjustment.get_transition('value');
 
                 if (transition) {

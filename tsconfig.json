@@ -9,6 +9,7 @@
         "lib": [
             "ES2021"
         ],
+        "skipLibCheck": true
     },
     "include": [
         "ambient.d.ts",

@@ -239,15 +239,13 @@ export default class TouchpadGestureCustomization extends Extension {
                 )
             );
 
-		// pinch to show notification list
-		const showNotificationListFingers = pinchToFingersMap.get(
+        // pinch to show notification list
+        const showNotificationListFingers = pinchToFingersMap.get(
             PinchGestureType.SHOW_NOTIFICATION_LIST
         );
-		if (showNotificationListFingers?.length)
-			this._extensions.push(
-                new ShowNotificationListExtension(
-                    showNotificationListFingers,
-                )
+        if (showNotificationListFingers?.length)
+            this._extensions.push(
+                new ShowNotificationListExtension(showNotificationListFingers)
             );
 
         // TODO: consider having an option for 'hold and swipe gestures' that can either

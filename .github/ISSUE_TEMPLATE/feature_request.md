@@ -2,24 +2,23 @@
 name: Feature request
 about: Suggest an enhancement or new feature
 title: "[Feature] "
-labels: enhancement
-
+labels: feature
 ---
 
-**Summary**
+### Summary
 A one-sentence summary of the requested feature.
 
-**Motivation**
+### Motivation
 Why is this feature needed? What user problem does it solve?
 
-**Proposal**
+### Proposal
 Describe the proposed change and any UX or implementation details.
 
-**Alternatives considered**
+### Alternatives considered
 Other approaches or why this might not be needed.
 
-**Compatibility**
+### Compatibility
 Any potential backward-compatibility or GNOME version concerns.
 
-**Additional context**
+### Additional context
 Screenshots, mockups, logs, or links to related issues/PRs.

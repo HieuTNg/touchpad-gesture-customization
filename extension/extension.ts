@@ -15,7 +15,7 @@ import {
     type AppForwardBackKeyBinds,
 } from './src/forwardBack.js';
 import * as VKeyboard from './src/utils/keyboard.js';
-import {SnapWindowExtension} from './src/snapWidnow.js';
+import {SnapWindowExtension} from './src/snapWindow.js';
 import {ShowDesktopExtension} from './src/pinchGestures/showDesktop.js';
 import {CloseWindowExtension} from './src/pinchGestures/closeWindow.js';
 import {ShowNotificationListExtension} from './src/pinchGestures/showNotificationList.js';
@@ -103,29 +103,29 @@ export default class TouchpadGestureCustomization extends Extension {
                 SwipeGestureType.OVERVIEW_NAVIGATION
             );
 
-        const overviewRoundTripGesterExtension =
+        const overviewRoundTripGestureExtension =
             new OverviewRoundTripGestureExtension(
                 this.settings.get_enum('overview-navigation-states')
             );
 
         // By default, disable overview navigation when user doesn't assign any gestures
-        overviewRoundTripGesterExtension.setVerticalSwipeTracker([]);
+        overviewRoundTripGestureExtension.setVerticalSwipeTracker([]);
 
         // Enable vertical swipe for overview navigation
         if (verticalOverviewNavigationFingers?.length) {
-            overviewRoundTripGesterExtension.setVerticalSwipeTracker(
+            overviewRoundTripGestureExtension.setVerticalSwipeTracker(
                 verticalOverviewNavigationFingers
             );
         }
 
         // Enable horizontal swipe for overview navigation
         if (horizontalOverviewNavigationFingers?.length) {
-            overviewRoundTripGesterExtension?.setHorizontalSwipeTracker(
+            overviewRoundTripGestureExtension?.setHorizontalSwipeTracker(
                 horizontalOverviewNavigationFingers
             );
         }
 
-        this._extensions.push(overviewRoundTripGesterExtension);
+        this._extensions.push(overviewRoundTripGestureExtension);
 
         /**
          * Workspace navigation
@@ -153,7 +153,7 @@ export default class TouchpadGestureCustomization extends Extension {
 
         // Enable vertical swipe for workspace navigation
         if (verticalWorkspaceNavigationFingers?.length)
-            gestureExtension.setVerticalWorkspceAnimationModifier(
+            gestureExtension.setVerticalWorkspaceAnimationModifier(
                 verticalWorkspaceNavigationFingers,
                 workspaceSwitchingState
             );

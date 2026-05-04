@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability, please report it directly to the maintainer via email at hieutnguyen@coooolapps.com.
+If you discover a security vulnerability, please report it directly to the maintainer via email at hieutng@coooolapps.com.
 
 ## Disclaimer
 

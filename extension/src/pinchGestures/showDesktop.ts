@@ -344,6 +344,7 @@ export class ShowDesktopExtension implements ISubExtension {
                 // top actors should be at the beginning
                 .reverse()
                 .map(actor => actor.meta_window)
+                .filter(win => win !== null) // Type guard filter
                 .filter(
                     win =>
                         win.get_window_type() !== Meta.WindowType.DESKTOP &&
@@ -369,7 +370,7 @@ export class ShowDesktopExtension implements ISubExtension {
                 .filter((actor: GObject.Object): actor is Meta.WindowActor => {
                     return (
                         actor instanceof Meta.WindowActor &&
-                        actor.meta_window.get_monitor() ===
+                        actor.meta_window?.get_monitor() ===
                             monitor.monitor.index
                     );
                 });
@@ -470,7 +471,7 @@ export class ShowDesktopExtension implements ISubExtension {
     }
 
     private _windowUnMinimized(_wm: Shell.WM, actor: Meta.WindowActor) {
-        if (actor.meta_window.get_workspace().index !== this._workspace?.index)
+        if (actor.meta_window?.get_workspace().index !== this._workspace?.index)
             return;
 
         this._minimizingWindows = [];

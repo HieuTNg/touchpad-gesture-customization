@@ -245,7 +245,7 @@ export class WorkspaceSwitchingExtension implements ISubExtension {
         ];
     }
 
-    setVerticalWorkspceAnimationModifier(
+    setVerticalWorkspaceAnimationModifier(
         nfingers: number[],
         workspaceSwitchingState: WorkspaceSwitchingState
     ) {

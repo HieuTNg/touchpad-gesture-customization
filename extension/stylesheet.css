@@ -39,6 +39,12 @@
     border-radius: 12px;
 }
 
+.gie-open-window-preview {
+    background-color: rgba(128, 255, 128, 0.5);
+    border: 1px solid rgba(128, 255, 128);
+    border-radius: 12px;
+}
+
 .gie-tile-window-preview {
     border-radius: 12px;
 }

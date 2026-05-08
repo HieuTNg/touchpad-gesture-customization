@@ -121,7 +121,10 @@ export class CloseWindowExtension implements ISubExtension {
             }
         }
 
-        progress = Math.abs(progress);
+        if (this._activePinchAnimation == PINCH_OUT_ANIMATION) {
+            progress = -progress;
+        }
+
         const scale = Util.lerp(
             this._activePinchAnimation.start,
             this._activePinchAnimation.end,

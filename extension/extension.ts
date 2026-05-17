@@ -17,7 +17,7 @@ import {
 import * as VKeyboard from './src/utils/keyboard.js';
 import {SnapWindowExtension} from './src/snapWindow.js';
 import {ShowDesktopExtension} from './src/pinchGestures/showDesktop.js';
-import {CloseWindowExtension} from './src/pinchGestures/closeWindow.js';
+import {OpenCloseWindowTabExtension} from './src/pinchGestures/openCloseWindowTab.js';
 import {ShowNotificationListExtension} from './src/pinchGestures/showNotificationList.js';
 import {VolumeControlGestureExtension} from './src/volumeControl.js';
 import {BrightnessControlGestureExtension} from './src/brightnessControl.js';
@@ -215,27 +215,27 @@ export default class TouchpadGestureCustomization extends Extension {
             this._extensions.push(new ShowDesktopExtension(showDesktopFingers));
         }
 
-        // pinch to close window
-        const closeWindowFingers = pinchToFingersMap.get(
-            PinchGestureType.CLOSE_WINDOW
+        // pinch to open/close window
+        const openCloseWindowFingers = pinchToFingersMap.get(
+            PinchGestureType.OPEN_CLOSE_WINDOW
         );
-        if (closeWindowFingers?.length)
+        if (openCloseWindowFingers?.length)
             this._extensions.push(
-                new CloseWindowExtension(
-                    closeWindowFingers,
-                    PinchGestureType.CLOSE_WINDOW
+                new OpenCloseWindowTabExtension(
+                    openCloseWindowFingers,
+                    PinchGestureType.OPEN_CLOSE_WINDOW
                 )
             );
 
-        // pinch to close document
-        const closeDocumentFingers = pinchToFingersMap.get(
-            PinchGestureType.CLOSE_DOCUMENT
+        // pinch to open/close document
+        const openCloseDocumentFingers = pinchToFingersMap.get(
+            PinchGestureType.OPEN_CLOSE_DOCUMENT
         );
-        if (closeDocumentFingers?.length)
+        if (openCloseDocumentFingers?.length)
             this._extensions.push(
-                new CloseWindowExtension(
-                    closeDocumentFingers,
-                    PinchGestureType.CLOSE_DOCUMENT
+                new OpenCloseWindowTabExtension(
+                    openCloseDocumentFingers,
+                    PinchGestureType.OPEN_CLOSE_DOCUMENT
                 )
             );
 

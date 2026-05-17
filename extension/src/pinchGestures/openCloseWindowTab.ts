@@ -13,7 +13,7 @@ import {getVirtualKeyboard, IVirtualKeyboard} from '../utils/keyboard.js';
 const END_OPACITY = 0;
 const PINCH_THRESHOLD = 0.02;
 
-enum CloseWindowGestureState {
+enum OpenCloseWindowTabGestureState {
     PINCH_IN = -1,
     DEFAULT = 0,
     PINCH_OUT = 1,
@@ -24,6 +24,7 @@ const PINCH_IN_ANIMATION = {
     start: 1,
     end: 0.5,
 } as const;
+
 const PINCH_OUT_ANIMATION = {
     style: 'gie-open-window-preview',
     start: 0.5,
@@ -32,10 +33,10 @@ const PINCH_OUT_ANIMATION = {
 
 declare type Type_TouchpadPinchGesture = typeof TouchpadPinchGesture.prototype;
 
-export class CloseWindowExtension implements ISubExtension {
-    private _closeType:
-        | PinchGestureType.CLOSE_DOCUMENT
-        | PinchGestureType.CLOSE_WINDOW;
+export class OpenCloseWindowTabExtension implements ISubExtension {
+    private _actionType:
+        | PinchGestureType.OPEN_CLOSE_DOCUMENT
+        | PinchGestureType.OPEN_CLOSE_WINDOW;
     private _keyboard: IVirtualKeyboard;
     private _pinchTracker: Type_TouchpadPinchGesture;
     private _preview: St.Widget;
@@ -47,11 +48,11 @@ export class CloseWindowExtension implements ISubExtension {
 
     constructor(
         nfingers: number[],
-        closeType:
-            | PinchGestureType.CLOSE_DOCUMENT
-            | PinchGestureType.CLOSE_WINDOW
+        actionType:
+            | PinchGestureType.OPEN_CLOSE_DOCUMENT
+            | PinchGestureType.OPEN_CLOSE_WINDOW
     ) {
-        this._closeType = closeType;
+        this._actionType = actionType;
         this._keyboard = getVirtualKeyboard();
 
         this._preview = new St.Widget({
@@ -92,11 +93,11 @@ export class CloseWindowExtension implements ISubExtension {
         tracker.confirmPinch(
             0,
             [
-                CloseWindowGestureState.PINCH_IN,
-                CloseWindowGestureState.DEFAULT,
-                CloseWindowGestureState.PINCH_OUT,
+                OpenCloseWindowTabGestureState.PINCH_IN,
+                OpenCloseWindowTabGestureState.DEFAULT,
+                OpenCloseWindowTabGestureState.PINCH_OUT,
             ],
-            CloseWindowGestureState.DEFAULT
+            OpenCloseWindowTabGestureState.DEFAULT
         );
 
         const frame = this._focusWindow.get_frame_rect();
@@ -105,7 +106,7 @@ export class CloseWindowExtension implements ISubExtension {
     }
 
     gestureUpdate(_tracker: unknown, progress: number): void {
-        progress = CloseWindowGestureState.DEFAULT - progress;
+        progress = OpenCloseWindowTabGestureState.DEFAULT - progress;
         let startAnimation: boolean = false;
 
         if (this._activePinchAnimation == null) {
@@ -147,20 +148,20 @@ export class CloseWindowExtension implements ISubExtension {
     gestureEnd(
         _tracker: unknown,
         duration: number,
-        progress: CloseWindowGestureState
+        progress: OpenCloseWindowTabGestureState
     ) {
         switch (progress) {
-            case CloseWindowGestureState.DEFAULT:
+            case OpenCloseWindowTabGestureState.DEFAULT:
                 this._animatePreview(false, duration);
                 break;
-            case CloseWindowGestureState.PINCH_IN:
+            case OpenCloseWindowTabGestureState.PINCH_IN:
                 this._animatePreview(
                     this._activePinchAnimation == PINCH_IN_ANIMATION,
                     duration,
                     this._invokeGestureCompleteAction.bind(this, progress)
                 );
                 break;
-            case CloseWindowGestureState.PINCH_OUT:
+            case OpenCloseWindowTabGestureState.PINCH_OUT:
                 this._animatePreview(
                     this._activePinchAnimation == PINCH_OUT_ANIMATION,
                     duration,
@@ -170,11 +171,13 @@ export class CloseWindowExtension implements ISubExtension {
         }
     }
 
-    private _invokeGestureCompleteAction(progress: CloseWindowGestureState) {
-        switch (this._closeType) {
-            case PinchGestureType.CLOSE_WINDOW:
+    private _invokeGestureCompleteAction(
+        progress: OpenCloseWindowTabGestureState
+    ) {
+        switch (this._actionType) {
+            case PinchGestureType.OPEN_CLOSE_WINDOW:
                 if (
-                    progress == CloseWindowGestureState.PINCH_OUT &&
+                    progress == OpenCloseWindowTabGestureState.PINCH_OUT &&
                     this._activePinchAnimation == PINCH_OUT_ANIMATION
                 ) {
                     if (this._focusWindow) {
@@ -188,7 +191,7 @@ export class CloseWindowExtension implements ISubExtension {
                         }
                     }
                 } else if (
-                    progress == CloseWindowGestureState.PINCH_IN &&
+                    progress == OpenCloseWindowTabGestureState.PINCH_IN &&
                     this._activePinchAnimation == PINCH_IN_ANIMATION
                 ) {
                     this._focusWindow?.delete?.(global.get_current_time());
@@ -196,9 +199,9 @@ export class CloseWindowExtension implements ISubExtension {
 
                 break;
 
-            case PinchGestureType.CLOSE_DOCUMENT:
+            case PinchGestureType.OPEN_CLOSE_DOCUMENT:
                 if (
-                    progress == CloseWindowGestureState.PINCH_OUT &&
+                    progress == OpenCloseWindowTabGestureState.PINCH_OUT &&
                     this._activePinchAnimation == PINCH_OUT_ANIMATION
                 ) {
                     this._keyboard.sendKeys([
@@ -206,7 +209,7 @@ export class CloseWindowExtension implements ISubExtension {
                         Clutter.KEY_t,
                     ]);
                 } else if (
-                    progress == CloseWindowGestureState.PINCH_IN &&
+                    progress == OpenCloseWindowTabGestureState.PINCH_IN &&
                     this._activePinchAnimation == PINCH_IN_ANIMATION
                 ) {
                     this._keyboard.sendKeys([

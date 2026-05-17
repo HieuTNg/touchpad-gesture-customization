@@ -50,11 +50,12 @@ gnome-extensions enable touchpad-gesture-customization@coooolapps.com
 | Volume Control           | Increase/decrease system volume              | 3/4/both | Vertical/Horizontal |
 | Brightness Control       | Increase/decrease system brightness          | 3/4/both | Vertical/Horizontal |
 
-| Pinch Gesture Actions  | Description                                    | Fingers |
-| :--------------------- | :--------------------------------------------- | :------ |
-| Show Desktop (\*)      | Hide all application (i.e. windows), pinch out | 3/4     |
-| Close Window           | Close an application, like clicking on "x"     | 3/4     |
-| Close Tab/Document     | Close a tab in application that uses tabs      | 3/4     |
+| Pinch Gesture Actions   | Description                                     | Fingers |
+| :---------------------- | :---------------------------------------------- | :------ |
+| Show Desktop (\*)       | Hide all application (i.e. windows), pinch out  | 3/4     |
+| Open/Close Window       | Open/Close an application, like clicking on "x" | 3/4     |
+| Open/Close Tab/Document | Open/Close a tab in application that uses tabs  | 3/4     |
+| Show Notification List  | Show GNOME notification                         | 3/4     |
 
 | Application Gestures Actions (\*) | Description                                      |
 | :-------------------------------- | :----------------------------------------------- |

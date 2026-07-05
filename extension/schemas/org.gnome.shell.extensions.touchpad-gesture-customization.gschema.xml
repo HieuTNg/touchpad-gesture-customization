@@ -6,6 +6,7 @@
     <value value='2' nick='CLOSE_WINDOW' />
     <value value='3' nick='CLOSE_DOCUMENT' />
     <value value='4' nick='SHOW_NOTIFICATION_LIST' />
+    <value value='5' nick='VOLUME_CONTROL' />
   </enum>
   <enum id='org.gnome.shell.extensions.touchpad-gesture-customization.overview-navigation-states'>
     <value value='0' nick='CYCLIC' />
@@ -24,6 +25,7 @@
     <value value='4' nick='VOLUME_CONTROL' />
     <value value='5' nick='BRIGHTNESS_CONTROL' />
     <value value='6' nick='WINDOW_MANIPULATION' />
+    <value value='7' nick='MEDIA_CONTROL' />
   </enum>
   <enum id='org.gnome.shell.extensions.touchpad-gesture-customization.horizontal-swipe-gestures'>
     <value value='0' nick='NONE' />
@@ -32,6 +34,7 @@
     <value value='3' nick='WINDOW_SWITCHING' />
     <value value='4' nick='VOLUME_CONTROL' />
     <value value='5' nick='BRIGHTNESS_CONTROL' />
+    <value value='6' nick='MEDIA_CONTROL' />
   </enum>
   <schema id="org.gnome.shell.extensions.touchpad-gesture-customization" path="/org/gnome/shell/extensions/touchpad-gesture-customization/">
     <!-- See also: https://docs.gtk.org/glib/gvariant-format-strings.html -->

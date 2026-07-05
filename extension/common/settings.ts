@@ -7,6 +7,7 @@ export enum PinchGestureType {
     OPEN_CLOSE_WINDOW = 2,
     OPEN_CLOSE_DOCUMENT = 3,
     SHOW_NOTIFICATION_LIST = 4,
+    VOLUME_CONTROL = 5,
 }
 
 export enum SwipeGestureType {
@@ -17,6 +18,7 @@ export enum SwipeGestureType {
     VOLUME_CONTROL = 4,
     BRIGHTNESS_CONTROL = 5,
     WINDOW_MANIPULATION = 6,
+    MEDIA_CONTROL = 7,
 }
 
 export enum OverviewNavigationState {

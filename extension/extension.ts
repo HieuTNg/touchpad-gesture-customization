@@ -24,8 +24,11 @@ import {OpenCloseWindowTabExtension} from './src/pinchGestures/openCloseWindowTa
 import {ShowNotificationListExtension} from './src/pinchGestures/showNotificationList.js';
 import {VolumeControlGestureExtension} from './src/volumeControl.js';
 import {BrightnessControlGestureExtension} from './src/brightnessControl.js';
+import {MediaControlGestureExtension} from './src/mediaControl.js';
+import {PinchVolumeControlExtension} from './src/pinchGestures/volumeControl.js';
 
 export default class TouchpadGestureCustomization extends Extension {
+
     private _extensions: ISubExtension[];
     settings?: Gio.Settings;
     private _settingChangedId = 0;
@@ -252,6 +255,15 @@ export default class TouchpadGestureCustomization extends Extension {
                 )
             );
 
+        // pinch to control volume
+        const pinchVolumeControlFingers = pinchToFingersMap.get(
+            PinchGestureType.VOLUME_CONTROL
+        );
+        if (pinchVolumeControlFingers?.length)
+            this._extensions.push(
+                new PinchVolumeControlExtension(pinchVolumeControlFingers)
+            );
+
         // TODO: consider having an option for 'hold and swipe gestures' that can either
         // be set to window tiling or app gesture (need to fix how to activate window tiling with
         // hold and swipe without being blocked by overview navigation)
@@ -340,6 +352,39 @@ export default class TouchpadGestureCustomization extends Extension {
             }
 
             this._extensions.push(brightnessControlGestureExtension);
+        }
+
+        /**
+         * Media Control
+         */
+
+        const verticalMediaControlFingers = verticalSwipeToFingersMap.get(
+            SwipeGestureType.MEDIA_CONTROL
+        );
+        const horizontalMediaControlFingers = horizontalSwipeToFingersMap.get(
+            SwipeGestureType.MEDIA_CONTROL
+        );
+
+        if (
+            verticalMediaControlFingers?.length ||
+            horizontalMediaControlFingers?.length
+        ) {
+            const mediaControlGestureExtension =
+                new MediaControlGestureExtension();
+
+            if (verticalMediaControlFingers?.length) {
+                mediaControlGestureExtension.setVerticalSwipeTracker(
+                    verticalMediaControlFingers
+                );
+            }
+
+            if (horizontalMediaControlFingers?.length) {
+                mediaControlGestureExtension.setHorizontalSwipeTracker(
+                    horizontalMediaControlFingers
+                );
+            }
+
+            this._extensions.push(mediaControlGestureExtension);
         }
 
         /**
@@ -479,4 +524,5 @@ export default class TouchpadGestureCustomization extends Extension {
         this._extensions.reverse().forEach(extension => extension.destroy());
         this._extensions = [];
     }
+
 }

@@ -287,6 +287,19 @@
                     </object>
                 </child>
 
+                <!-- Switch windows across all workspaces -->
+                <child>
+                    <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Switch windows across all workspaces</property>
+                        <property name="subtitle">Show windows from all workspaces in the Alt+Tab switcher</property>
+                        <child>
+                            <object class="GtkSwitch" id="alttab-all-workspaces">
+                                <property name="valign">center</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
                 <!-- Window switcher popup delay (ms) -->
                 <child>
                     <object class="AdwActionRow">

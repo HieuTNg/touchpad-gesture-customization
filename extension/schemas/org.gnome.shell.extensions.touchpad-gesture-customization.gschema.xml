@@ -53,6 +53,10 @@
     <key name="alttab-delay" type="i">
       <default>150</default>
     </key>
+    <key name="alttab-all-workspaces" type="b">
+      <default>false</default>
+      <description>If true, window switcher shows windows across all workspaces</description>
+    </key>
     <key name="hold-swipe-delay-duration" type="i">
       <default>10</default>
     </key>

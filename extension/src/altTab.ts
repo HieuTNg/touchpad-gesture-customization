@@ -207,6 +207,13 @@ export default class AltTabGestureExtension implements ISubExtension {
         this._progress = 0;
 
         if (this._extState === AltTabExtState.DEFAULT) {
+            if (ExtSettings.ALTTAB_ALL_WORKSPACES) {
+                const windowSwitcherSettings = new Gio.Settings({
+                    schema_id: 'org.gnome.shell.window-switcher',
+                });
+                windowSwitcherSettings.set_boolean('current-workspace-only', false);
+            }
+
             this._switcher = new WindowSwitcherPopup();
             this._switcher._switcherList.add_style_class_name(
                 'gie-alttab-quick-transition'
@@ -298,8 +305,14 @@ export default class AltTabGestureExtension implements ISubExtension {
     _gestureEnd(): void {
         if (this._switcher) {
             const win =
-                this._switcher._items[this._switcher._selectedIndex].window;
-            Main.activateWindow(win);
+                this._switcher._items[this._switcher._selectedIndex]?.window;
+            if (win) {
+                if (typeof (win as any).activate === 'function') {
+                    (win as any).activate(global.get_current_time());
+                } else {
+                    Main.activateWindow(win);
+                }
+            }
             this._switcher.destroy();
             this._switcher = undefined;
         }

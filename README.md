@@ -45,10 +45,10 @@ gnome-extensions enable touchpad-gesture-customization@coooolapps.com
 | Unmaximize a window      | Part of Window Manipulation, not Minimize    | 3/4/both | Vertical            |
 | Fullscreen               | Part of Window Manipulation, not Maximize    | 3/4/both | Vertical            |
 | Minimize a window        | Part of Window Manipulation                  | 3/4/both | Vertical            |
-| Snap/half-tile a window  | Part of Window Manipulation, snap window to  | 3/4/both | Vertical (\*)       |
-|                          | either half of screen                        |          |                     |
+| Snap/half-tile a window  | Part of Window Manipulation, snap window to <br>either half of screen | 3/4/both | Vertical (\*) |
 | Volume Control           | Increase/decrease system volume              | 3/4/both | Vertical/Horizontal |
 | Brightness Control       | Increase/decrease system brightness          | 3/4/both | Vertical/Horizontal |
+| Media Control            | Play next/previous media                     | 3/4/both | Vertical/Horizontal |
 
 | Pinch Gesture Actions   | Description                                     | Fingers |
 | :---------------------- | :---------------------------------------------- | :------ |
@@ -56,6 +56,7 @@ gnome-extensions enable touchpad-gesture-customization@coooolapps.com
 | Open/Close Window       | Open/Close an application, like clicking on "x" | 3/4     |
 | Open/Close Tab/Document | Open/Close a tab in application that uses tabs  | 3/4     |
 | Show Notification List  | Show GNOME notification                         | 3/4     |
+| Volume Control          | Increase/decrease system volume                 | 3/4     |
 
 | Application Gestures Actions (\*) | Description                                      |
 | :-------------------------------- | :----------------------------------------------- |

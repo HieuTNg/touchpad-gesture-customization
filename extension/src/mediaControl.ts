@@ -4,7 +4,6 @@ import {TouchpadSwipeGesture} from './swipeTracker.js';
 import {getVirtualKeyboard} from './utils/keyboard.js';
 
 export class MediaControlGestureExtension implements ISubExtension {
-
     private _verticalTouchpadSwipeTracker?: typeof TouchpadSwipeGesture.prototype;
     private _horizontalTouchpadSwipeTracker?: typeof TouchpadSwipeGesture.prototype;
     private _verticalConnectHandlers?: number[];
@@ -98,5 +97,4 @@ export class MediaControlGestureExtension implements ISubExtension {
             }),
         ];
     }
-
 }

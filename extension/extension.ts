@@ -7,7 +7,8 @@ import {
 import {
     AllSettingsKeys,
     PinchGestureType,
-    SwipeGestureType,
+    VerticalSwipeGestureType,
+    HorizontalSwipeGestureType,
 } from './common/settings.js';
 import * as Constants from './constants.js';
 import {OverviewRoundTripGestureExtension} from './src/overviewRoundTrip.js';
@@ -28,7 +29,6 @@ import {MediaControlGestureExtension} from './src/mediaControl.js';
 import {PinchVolumeControlExtension} from './src/pinchGestures/volumeControl.js';
 
 export default class TouchpadGestureCustomization extends Extension {
-
     private _extensions: ISubExtension[];
     settings?: Gio.Settings;
     private _settingChangedId = 0;
@@ -100,12 +100,12 @@ export default class TouchpadGestureCustomization extends Extension {
          */
 
         const verticalOverviewNavigationFingers = verticalSwipeToFingersMap.get(
-            SwipeGestureType.OVERVIEW_NAVIGATION
+            VerticalSwipeGestureType.OVERVIEW_NAVIGATION
         );
 
         const horizontalOverviewNavigationFingers =
             horizontalSwipeToFingersMap.get(
-                SwipeGestureType.OVERVIEW_NAVIGATION
+                HorizontalSwipeGestureType.OVERVIEW_NAVIGATION
             );
 
         const overviewRoundTripGestureExtension =
@@ -139,10 +139,12 @@ export default class TouchpadGestureCustomization extends Extension {
         // TODO: match workspace navigation control in overview mode and normal mode
 
         const verticalWorkspaceNavigationFingers =
-            verticalSwipeToFingersMap.get(SwipeGestureType.WORKSPACE_SWITCHING);
+            verticalSwipeToFingersMap.get(
+                VerticalSwipeGestureType.WORKSPACE_SWITCHING
+            );
         const horizontalWorkspaceNavigationFingers =
             horizontalSwipeToFingersMap.get(
-                SwipeGestureType.WORKSPACE_SWITCHING
+                HorizontalSwipeGestureType.WORKSPACE_SWITCHING
             );
 
         const gestureExtension = new WorkspaceSwitchingExtension();
@@ -177,10 +179,12 @@ export default class TouchpadGestureCustomization extends Extension {
          */
 
         const verticalWindowSwitchingFingers = verticalSwipeToFingersMap.get(
-            SwipeGestureType.WINDOW_SWITCHING
+            VerticalSwipeGestureType.WINDOW_SWITCHING
         );
         const horizontalWindowSwitchingFingers =
-            horizontalSwipeToFingersMap.get(SwipeGestureType.WINDOW_SWITCHING);
+            horizontalSwipeToFingersMap.get(
+                HorizontalSwipeGestureType.WINDOW_SWITCHING
+            );
 
         if (
             verticalWindowSwitchingFingers?.length ||
@@ -275,7 +279,7 @@ export default class TouchpadGestureCustomization extends Extension {
         // TODO: when both vertical and horizontal swipe are not set to window manipulation
         // the switch for minimise window should be disbaled
         const verticalWindowManipulationFingers = verticalSwipeToFingersMap.get(
-            SwipeGestureType.WINDOW_MANIPULATION
+            VerticalSwipeGestureType.WINDOW_MANIPULATION
         );
 
         if (verticalWindowManipulationFingers?.length)
@@ -288,10 +292,10 @@ export default class TouchpadGestureCustomization extends Extension {
          */
 
         const verticalVolumeControlFingers = verticalSwipeToFingersMap.get(
-            SwipeGestureType.VOLUME_CONTROL
+            VerticalSwipeGestureType.VOLUME_CONTROL
         );
         const horizontalVolumeControlFingers = horizontalSwipeToFingersMap.get(
-            SwipeGestureType.VOLUME_CONTROL
+            HorizontalSwipeGestureType.VOLUME_CONTROL
         );
 
         if (
@@ -323,11 +327,11 @@ export default class TouchpadGestureCustomization extends Extension {
          */
 
         const verticalBrightnessControlFingers = verticalSwipeToFingersMap.get(
-            SwipeGestureType.BRIGHTNESS_CONTROL
+            VerticalSwipeGestureType.BRIGHTNESS_CONTROL
         );
         const horizontalBrightnessControlFingers =
             horizontalSwipeToFingersMap.get(
-                SwipeGestureType.BRIGHTNESS_CONTROL
+                HorizontalSwipeGestureType.BRIGHTNESS_CONTROL
             );
 
         if (
@@ -359,10 +363,10 @@ export default class TouchpadGestureCustomization extends Extension {
          */
 
         const verticalMediaControlFingers = verticalSwipeToFingersMap.get(
-            SwipeGestureType.MEDIA_CONTROL
+            VerticalSwipeGestureType.MEDIA_CONTROL
         );
         const horizontalMediaControlFingers = horizontalSwipeToFingersMap.get(
-            SwipeGestureType.MEDIA_CONTROL
+            HorizontalSwipeGestureType.MEDIA_CONTROL
         );
 
         if (
@@ -408,7 +412,7 @@ export default class TouchpadGestureCustomization extends Extension {
     }
 
     private _getVerticalSwipeGestureTypeAndFingers(): Map<
-        SwipeGestureType,
+        VerticalSwipeGestureType,
         number[]
     > {
         if (!this.settings) return new Map();
@@ -420,7 +424,10 @@ export default class TouchpadGestureCustomization extends Extension {
             'vertical-swipe-4-fingers-gesture'
         );
 
-        const swipeGestureToFingersMap = new Map<SwipeGestureType, number[]>();
+        const swipeGestureToFingersMap = new Map<
+            VerticalSwipeGestureType,
+            number[]
+        >();
 
         if (verticalSwipe3FingerGesture === verticalSwipe4FingerGesture)
             swipeGestureToFingersMap.set(verticalSwipe3FingerGesture, [3, 4]);
@@ -433,7 +440,7 @@ export default class TouchpadGestureCustomization extends Extension {
     }
 
     private _getHorizontalSwipeGestureTypeAndFingers(): Map<
-        SwipeGestureType,
+        HorizontalSwipeGestureType,
         number[]
     > {
         if (!this.settings) return new Map();
@@ -445,7 +452,10 @@ export default class TouchpadGestureCustomization extends Extension {
             'horizontal-swipe-4-fingers-gesture'
         );
 
-        const swipeGestureToFingersMap = new Map<SwipeGestureType, number[]>();
+        const swipeGestureToFingersMap = new Map<
+            HorizontalSwipeGestureType,
+            number[]
+        >();
 
         if (horizontalSwipe3FingerGesture === horizontalSwipe4FingerGesture)
             swipeGestureToFingersMap.set(horizontalSwipe3FingerGesture, [3, 4]);
@@ -526,5 +536,4 @@ export default class TouchpadGestureCustomization extends Extension {
         this._extensions.reverse().forEach(extension => extension.destroy());
         this._extensions = [];
     }
-
 }

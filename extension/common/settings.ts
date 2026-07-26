@@ -10,7 +10,7 @@ export enum PinchGestureType {
     VOLUME_CONTROL = 5,
 }
 
-export enum SwipeGestureType {
+export enum VerticalSwipeGestureType {
     NONE = 0,
     OVERVIEW_NAVIGATION = 1,
     WORKSPACE_SWITCHING = 2,
@@ -19,6 +19,16 @@ export enum SwipeGestureType {
     BRIGHTNESS_CONTROL = 5,
     WINDOW_MANIPULATION = 6,
     MEDIA_CONTROL = 7,
+}
+
+export enum HorizontalSwipeGestureType {
+    NONE = 0,
+    OVERVIEW_NAVIGATION = 1,
+    WORKSPACE_SWITCHING = 2,
+    WINDOW_SWITCHING = 3,
+    VOLUME_CONTROL = 4,
+    BRIGHTNESS_CONTROL = 5,
+    MEDIA_CONTROL = 6,
 }
 
 export enum OverviewNavigationState {
@@ -95,12 +105,14 @@ type Enum_Functions<K extends EnumSettingsKeys, T> = {
 };
 
 type SettingsEnumFunctions = Enum_Functions<
-    | 'vertical-swipe-3-fingers-gesture'
-    | 'horizontal-swipe-3-fingers-gesture'
-    | 'vertical-swipe-4-fingers-gesture'
-    | 'horizontal-swipe-4-fingers-gesture',
-    SwipeGestureType
+    'vertical-swipe-3-fingers-gesture' | 'vertical-swipe-4-fingers-gesture',
+    VerticalSwipeGestureType
 > &
+    Enum_Functions<
+        | 'horizontal-swipe-3-fingers-gesture'
+        | 'horizontal-swipe-4-fingers-gesture',
+        HorizontalSwipeGestureType
+    > &
     Enum_Functions<
         'pinch-3-finger-gesture' | 'pinch-4-finger-gesture',
         PinchGestureType

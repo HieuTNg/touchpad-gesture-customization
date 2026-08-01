@@ -49,6 +49,7 @@ export default class AltTabGestureExtension implements ISubExtension {
     private _extState = AltTabExtState.DISABLED;
     private _progress = 0;
     private _altTabTimeoutId = 0;
+    private _unredirectInhibited = false;
 
     constructor() {
         this._adjustment = new St.Adjustment({
@@ -193,6 +194,29 @@ export default class AltTabGestureExtension implements ISubExtension {
             this._switcher.destroy();
             this._switcher = undefined;
         }
+
+        this._uninhibitUnredirect();
+    }
+
+    /**
+     * Main.pushModal() inhibits unredirect for us, but we pop the modal right
+     * away so that the gesture keeps working, and Main.popModal() re-enables
+     * it. Without an inhibit of our own, mutter direct-scans out a window whose
+     * paint box exactly covers the monitor (fullscreen, or maximized while the
+     * panel is hidden) and the switcher is never composited in.
+     */
+    private _inhibitUnredirect() {
+        if (this._unredirectInhibited) return;
+
+        global.compositor.disable_unredirect();
+        this._unredirectInhibited = true;
+    }
+
+    private _uninhibitUnredirect() {
+        if (!this._unredirectInhibited) return;
+
+        global.compositor.enable_unredirect();
+        this._unredirectInhibited = false;
     }
 
     _onUpdateAdjustmentValue(): void {
@@ -240,6 +264,7 @@ export default class AltTabGestureExtension implements ISubExtension {
             if (nelement > 0) {
                 this._switcher.show(false, 'switch-windows', 0);
                 this._switcher._popModal();
+                this._inhibitUnredirect();
 
                 if (this._switcher._initialDelayTimeoutId) {
                     GLib.source_remove(this._switcher._initialDelayTimeoutId);
@@ -327,6 +352,8 @@ export default class AltTabGestureExtension implements ISubExtension {
     }
 
     private _reset() {
+        this._uninhibitUnredirect();
+
         if (this._extState > AltTabExtState.DEFAULT) {
             this._extState = AltTabExtState.DEFAULT;
 

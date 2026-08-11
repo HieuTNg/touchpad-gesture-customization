@@ -84,6 +84,12 @@
       <default>true</default>
       <description>Invert brightness control gesture direction</description>
     </key>
+    <key name='invert-media-gesture-direction' type='b'>
+      <!-- Defaults to false to preserve the previously hardcoded
+           followNaturalScroll=true behaviour for existing users. -->
+      <default>false</default>
+      <description>Invert media control gesture direction</description>
+    </key>
     <key name='enable-forward-back-gesture' type='b'>
       <default>false</default>
       <description>Enable forward/back keybinding gesture</description>

@@ -58,6 +58,7 @@ export type BooleanSettingsKeys =
     | 'follow-natural-scroll'
     | 'invert-volume-gesture-direction'
     | 'invert-brightness-gesture-direction'
+    | 'invert-media-gesture-direction'
     | 'enable-forward-back-gesture'
     | 'default-overview-gesture-direction'
     | 'enable-vertical-app-gesture';

@@ -150,6 +150,7 @@ function bindPrefsSettings(builder: GtkBuilder, settings: Gio.Settings) {
         settings,
         builder
     );
+    bind_boolean_value('invert-media-gesture-direction', settings, builder);
     bind_boolean_value('enable-vertical-app-gesture', settings, builder);
 
     bind_boolean_value('allow-minimize-window', settings, builder);

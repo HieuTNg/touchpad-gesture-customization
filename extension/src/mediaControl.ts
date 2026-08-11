@@ -2,6 +2,7 @@ import Clutter from 'gi://Clutter';
 import Shell from 'gi://Shell';
 import {TouchpadSwipeGesture} from './swipeTracker.js';
 import {getVirtualKeyboard} from './utils/keyboard.js';
+import {ExtSettings} from '../constants.js';
 
 export class MediaControlGestureExtension implements ISubExtension {
     private _verticalTouchpadSwipeTracker?: typeof TouchpadSwipeGesture.prototype;
@@ -35,7 +36,7 @@ export class MediaControlGestureExtension implements ISubExtension {
             nfingers,
             Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW,
             Clutter.Orientation.VERTICAL,
-            true // followNaturalScroll
+            !ExtSettings.INVERT_MEDIA_DIRECTION // followNaturalScroll
         );
 
         this._verticalConnectHandlers = [
@@ -69,7 +70,7 @@ export class MediaControlGestureExtension implements ISubExtension {
             nfingers,
             Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW,
             Clutter.Orientation.HORIZONTAL,
-            true // followNaturalScroll
+            !ExtSettings.INVERT_MEDIA_DIRECTION // followNaturalScroll
         );
 
         this._horizontalConnectHandlers = [

@@ -507,6 +507,8 @@ export default class TouchpadGestureCustomization extends Extension {
                 this.settings.get_boolean(
                     'invert-brightness-gesture-direction'
                 );
+            Constants.ExtSettings.INVERT_MEDIA_DIRECTION =
+                this.settings.get_boolean('invert-media-gesture-direction');
             Constants.ExtSettings.APP_GESTURES = this.settings.get_boolean(
                 'enable-forward-back-gesture'
             );

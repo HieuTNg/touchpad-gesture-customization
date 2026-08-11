@@ -229,6 +229,19 @@
                     </object>
                 </child>
 
+                <!-- Invert media direction -->
+                <child>
+                    <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Invert media gesture direction</property>
+                        <child>
+                        <object class="GtkSwitch" id="invert-media-gesture-direction">
+                            <property name="valign">center</property>
+                            <property name="active">False</property>
+                        </object>
+                        </child>
+                    </object>
+                </child>
+
                 <!-- Enable vertical swipe for application specific gestures -->
                 <child>
                     <object class="AdwActionRow">

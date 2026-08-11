@@ -48,7 +48,7 @@ gnome-extensions enable touchpad-gesture-customization@coooolapps.com
 | Snap/half-tile a window  | Part of Window Manipulation, snap window to <br>either half of screen | 3/4/both | Vertical (\*) |
 | Volume Control           | Increase/decrease system volume              | 3/4/both | Vertical/Horizontal |
 | Brightness Control       | Increase/decrease system brightness          | 3/4/both | Vertical/Horizontal |
-| Media Control            | Play next/previous media                     | 3/4/both | Vertical/Horizontal |
+| Media Control            | Play next/previous media, hold to play/pause | 3/4/both | Vertical/Horizontal |
 
 | Pinch Gesture Actions   | Description                                     | Fingers |
 | :---------------------- | :---------------------------------------------- | :------ |
@@ -82,6 +82,12 @@ gnome-extensions enable touchpad-gesture-customization@coooolapps.com
 
 - For horizontal gestures, application gesture only works if 3/4-fingers horizontal swipe is set to **Window Switching**
 - Application gesture also supports vertical swipe but is still experimental and requires users to turn off other actions for 3/4-fingers vertical swipe (i.e. set the action to None).
+
+#### Media Control Notes
+
+- In addition to swiping, resting 3/4 fingers on the touchpad (a *hold* gesture) toggles play/pause. The action fires as soon as the hold is registered, so you get immediate feedback that the gesture was recognised. Note that libinput only reports a hold once the fingers have been still for a short moment, so a quick tap does not trigger it.
+- Media Control sends the standard media keys (`XF86AudioNext` / `XF86AudioPrev` / `XF86AudioPlay`), so it applies to whichever player GNOME currently considers active, exactly as pressing the media keys on a keyboard would. It is not tied to any specific application.
+- How far you need to swipe before a track changes scales with the **Touchpad swipe speed** setting: raising it makes media swipes trigger with a shorter movement.
 
 #### Notes
 

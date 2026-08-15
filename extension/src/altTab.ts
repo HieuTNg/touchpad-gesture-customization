@@ -208,14 +208,14 @@ export default class AltTabGestureExtension implements ISubExtension {
     private _inhibitUnredirect() {
         if (this._unredirectInhibited) return;
 
-        global.compositor.disable_unredirect();
+        (global.compositor as compositor).disable_unredirect();
         this._unredirectInhibited = true;
     }
 
     private _uninhibitUnredirect() {
         if (!this._unredirectInhibited) return;
 
-        global.compositor.enable_unredirect();
+        (global.compositor as compositor).enable_unredirect();
         this._unredirectInhibited = false;
     }
 

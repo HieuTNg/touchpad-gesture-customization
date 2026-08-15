@@ -16,3 +16,8 @@ declare type KeysThatStartsWith<
 declare type KeysOfType<T, U> = {
     [P in keyof T]: T[P] extends U ? P : never;
 }[keyof T];
+
+declare type compositor = typeof global.compositor & {
+    disable_unredirect(): void;
+    enable_unredirect(): void;
+}

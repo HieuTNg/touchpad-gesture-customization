@@ -213,8 +213,7 @@ export default class AltTabGestureExtension implements ISubExtension {
         // it lives on Meta as a top-level function taking the display.
         if ((global.compositor as Partial<compositor>).disable_unredirect)
             (global.compositor as compositor).disable_unredirect();
-        else
-            Meta.disable_unredirect_for_display(global.display);
+        else Meta.disable_unredirect_for_display(global.display);
 
         this._unredirectInhibited = true;
     }
@@ -224,8 +223,7 @@ export default class AltTabGestureExtension implements ISubExtension {
 
         if ((global.compositor as Partial<compositor>).enable_unredirect)
             (global.compositor as compositor).enable_unredirect();
-        else
-            Meta.enable_unredirect_for_display(global.display);
+        else Meta.enable_unredirect_for_display(global.display);
 
         this._unredirectInhibited = false;
     }

@@ -20,4 +20,4 @@ declare type KeysOfType<T, U> = {
 declare type compositor = typeof global.compositor & {
     disable_unredirect(): void;
     enable_unredirect(): void;
-}
+};

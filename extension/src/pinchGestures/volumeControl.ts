@@ -95,12 +95,7 @@ export class PinchVolumeControlExtension implements ISubExtension {
         const icon = Gio.Icon.new_for_string(VolumeIcons[iconIndex]);
         const label = this._sink?.get_port().human_port ?? '';
 
-        Main.osdWindowManager.show(
-            0,
-            icon,
-            label,
-            this._maxVolumeLimitRatio
-        );
+        Main.osdWindowManager.show(0, icon, label, this._maxVolumeLimitRatio);
     }
 
     _gestureBegin(): void {

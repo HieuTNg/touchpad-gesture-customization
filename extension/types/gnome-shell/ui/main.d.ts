@@ -24,7 +24,7 @@ declare module 'resource:///org/gnome/shell/ui/main.js' {
             position?: number,
             box?: string
         ): void;
-        toggleCalendar(): void,
+        toggleCalendar(): void;
     } & Clutter.Actor;
 
     const overview: {

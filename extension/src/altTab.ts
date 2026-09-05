@@ -1,4 +1,5 @@
 import Clutter from 'gi://Clutter';
+import Meta from 'gi://Meta';
 import GLib from 'gi://GLib';
 import Shell from 'gi://Shell';
 import St from 'gi://St';
@@ -208,14 +209,24 @@ export default class AltTabGestureExtension implements ISubExtension {
     private _inhibitUnredirect() {
         if (this._unredirectInhibited) return;
 
-        (global.compositor as compositor).disable_unredirect();
+        // GNOME 47 moved unredirect control onto global.compositor. On 45/46
+        // it lives on Meta as a top-level function taking the display.
+        if ((global.compositor as Partial<compositor>).disable_unredirect)
+            (global.compositor as compositor).disable_unredirect();
+        else
+            Meta.disable_unredirect_for_display(global.display);
+
         this._unredirectInhibited = true;
     }
 
     private _uninhibitUnredirect() {
         if (!this._unredirectInhibited) return;
 
-        (global.compositor as compositor).enable_unredirect();
+        if ((global.compositor as Partial<compositor>).enable_unredirect)
+            (global.compositor as compositor).enable_unredirect();
+        else
+            Meta.enable_unredirect_for_display(global.display);
+
         this._unredirectInhibited = false;
     }
 

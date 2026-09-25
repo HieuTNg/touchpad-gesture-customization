@@ -31,6 +31,19 @@ export enum HorizontalSwipeGestureType {
     MEDIA_CONTROL = 6,
 }
 
+export enum TapGestureType {
+    NONE = 0,
+    TOGGLE_OVERVIEW = 1,
+    SHOW_DESKTOP = 2,
+    SHOW_NOTIFICATION_LIST = 3,
+    CLOSE_WINDOW = 4,
+    PLAY_PAUSE = 5,
+    NEXT_TRACK = 6,
+    PREVIOUS_TRACK = 7,
+    MUTE = 8,
+    SCREENSHOT = 9,
+}
+
 export enum OverviewNavigationState {
     CYCLIC = 0,
     GNOME = 1,
@@ -78,6 +91,8 @@ export type EnumSettingsKeys =
     | 'horizontal-swipe-4-fingers-gesture'
     | 'pinch-3-finger-gesture'
     | 'pinch-4-finger-gesture'
+    | 'tap-3-finger-gesture'
+    | 'tap-4-finger-gesture'
     | 'overview-navigation-states'
     | 'workspace-switching-states';
 
@@ -117,6 +132,10 @@ type SettingsEnumFunctions = Enum_Functions<
     Enum_Functions<
         'pinch-3-finger-gesture' | 'pinch-4-finger-gesture',
         PinchGestureType
+    > &
+    Enum_Functions<
+        'tap-3-finger-gesture' | 'tap-4-finger-gesture',
+        TapGestureType
     > &
     Enum_Functions<'overview-navigation-states', OverviewNavigationState> &
     Enum_Functions<'workspace-switching-states', WorkspaceSwitchingState>;

@@ -14,6 +14,21 @@
         </items>
     </object>
 
+    <object class="GtkStringList" id="tap_gestures_model">
+        <items>
+            <item translatable="yes">None</item>
+            <item translatable="yes">Toggle Overview</item>
+            <item translatable="yes">Toggle Desktop</item>
+            <item translatable="yes">Show notification list</item>
+            <item translatable="yes">Close Window</item>
+            <item translatable="yes">Play/Pause</item>
+            <item translatable="yes">Next Track</item>
+            <item translatable="yes">Previous Track</item>
+            <item translatable="yes">Mute/Unmute</item>
+            <item translatable="yes">Screenshot</item>
+        </items>
+    </object>
+
      <object class="GtkStringList" id="vertical_swipe_gestures_model">
         <items>
             <item translatable="yes">None</item>
@@ -42,11 +57,13 @@
     <object class="AdwPreferencesPage" id="gestures_page">
         <property name="title">System Gestures</property>
         <property name="icon-name">gesture-swipe-right-symbolic</property>
+        <property name="description" translatable="yes">The Media Control option toggles play/pause when your fingers rest still on the touchpad for a moment, unless a tap gesture is set for that same number of fingers.</property>
 
         <!-- 3-fingers Swipe Gestures -->
         <child>
             <object class="AdwPreferencesGroup">
                 <property name="title">3-Fingers Swipe Gestures</property>
+                <property name="description" translatable="yes">Swipe to trigger the action. Do not hold before swiping.</property>
 
                 <!-- Vertical -->
                 <child>
@@ -71,6 +88,7 @@
         <child>
             <object class="AdwPreferencesGroup">
                 <property name="title">4-Fingers Swipe Gestures</property>
+                <property name="description" translatable="yes">Swipe to trigger the action. Do not hold before swiping.</property>
 
                 <!-- Vertical -->
                 <child>
@@ -95,6 +113,7 @@
         <child>
             <object class="AdwPreferencesGroup">
                 <property name="title">Pinch Gestures</property>
+                <property name="description" translatable="yes">Pull your fingers together/push your fingers apart.</property>
 
                 <!-- 3 finger pinch gesture -->
                 <child>
@@ -109,6 +128,30 @@
                     <object class="AdwComboRow" id="pinch-4-finger-gesture">
                         <property name="title" translatable="yes">4-fingers pinch gesture</property>
                         <property name="model">pinch_gestures_model</property>
+                    </object>
+                </child>
+            </object>
+        </child>
+
+        <!-- Tap Gestures -->
+        <child>
+            <object class="AdwPreferencesGroup">
+                <property name="title">Tap Gestures</property>
+                <property name="description" translatable="yes">Rest your fingers and lift 180–480 ms after touching down. Getting the timing right can take a little practice. Quicker taps (lifting before 180 ms) can't trigger an action because they register as a middle click for 3-fingers and cannot be overridden. Setting a tap action turns off Media Control's play/pause on finger rest for the same number of fingers.</property>
+
+                <!-- 3 finger tap gesture -->
+                <child>
+                    <object class="AdwComboRow" id="tap-3-finger-gesture">
+                        <property name="title" translatable="yes">3-fingers tap gesture</property>
+                        <property name="model">tap_gestures_model</property>
+                    </object>
+                </child>
+
+                <!-- 4 finger tap gesture -->
+                <child>
+                    <object class="AdwComboRow" id="tap-4-finger-gesture">
+                        <property name="title" translatable="yes">4-fingers tap gesture</property>
+                        <property name="model">tap_gestures_model</property>
                     </object>
                 </child>
             </object>

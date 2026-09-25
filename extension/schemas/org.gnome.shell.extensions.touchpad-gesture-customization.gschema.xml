@@ -8,6 +8,18 @@
     <value value='4' nick='SHOW_NOTIFICATION_LIST' />
     <value value='5' nick='VOLUME_CONTROL' />
   </enum>
+  <enum id='org.gnome.shell.extensions.touchpad-gesture-customization.tap-gestures'>
+    <value value='0' nick='NONE' />
+    <value value='1' nick='TOGGLE_OVERVIEW' />
+    <value value='2' nick='SHOW_DESKTOP' />
+    <value value='3' nick='SHOW_NOTIFICATION_LIST' />
+    <value value='4' nick='CLOSE_WINDOW' />
+    <value value='5' nick='PLAY_PAUSE' />
+    <value value='6' nick='NEXT_TRACK' />
+    <value value='7' nick='PREVIOUS_TRACK' />
+    <value value='8' nick='MUTE' />
+    <value value='9' nick='SCREENSHOT' />
+  </enum>
   <enum id='org.gnome.shell.extensions.touchpad-gesture-customization.overview-navigation-states'>
     <value value='0' nick='CYCLIC' />
     <value value='1' nick='GNOME' />
@@ -105,6 +117,14 @@
     <key name="pinch-4-finger-gesture" enum="org.gnome.shell.extensions.touchpad-gesture-customization.pinch-gestures">
       <default>'CLOSE_WINDOW'</default>
       <description>Gesture action for 4 finger pinch</description>
+    </key>
+    <key name="tap-3-finger-gesture" enum="org.gnome.shell.extensions.touchpad-gesture-customization.tap-gestures">
+      <default>'NONE'</default>
+      <description>Gesture action for 3 finger tap</description>
+    </key>
+    <key name="tap-4-finger-gesture" enum="org.gnome.shell.extensions.touchpad-gesture-customization.tap-gestures">
+      <default>'NONE'</default>
+      <description>Gesture action for 4 finger tap</description>
     </key>
     <key name="vertical-swipe-3-fingers-gesture" enum="org.gnome.shell.extensions.touchpad-gesture-customization.vertical-swipe-gestures">
       <default>'OVERVIEW_NAVIGATION'</default>

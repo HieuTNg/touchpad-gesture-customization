@@ -12,6 +12,15 @@ export class MediaControlGestureExtension implements ISubExtension {
     private _verticalDelta = 0;
     private _horizontalDelta = 0;
     private _threshold = 50; // Threshold for swipe to trigger action
+    private _tapFingers: number[];
+
+    /**
+     * @param tapFingers finger counts that have a tap action; resting these
+     * fingers doesn't toggle play/pause, since every tap starts with a rest
+     */
+    constructor(tapFingers: number[] = []) {
+        this._tapFingers = tapFingers;
+    }
 
     apply() {
         // Nothing special to apply on startup
@@ -58,10 +67,15 @@ export class MediaControlGestureExtension implements ISubExtension {
                     getVirtualKeyboard().sendKeys([Clutter.KEY_AudioNext]);
                 }
             }),
-            this._verticalTouchpadSwipeTracker.connect('hold', () => {
-                // Hold -> Play/Pause
-                getVirtualKeyboard().sendKeys([Clutter.KEY_AudioPlay]);
-            }),
+            this._verticalTouchpadSwipeTracker.connect(
+                'hold',
+                (_gesture, _time, fingers) => {
+                    if (this._tapFingers.includes(fingers)) return;
+
+                    // Hold -> Play/Pause
+                    getVirtualKeyboard().sendKeys([Clutter.KEY_AudioPlay]);
+                }
+            ),
         ];
     }
 
@@ -92,10 +106,15 @@ export class MediaControlGestureExtension implements ISubExtension {
                     getVirtualKeyboard().sendKeys([Clutter.KEY_AudioNext]);
                 }
             }),
-            this._horizontalTouchpadSwipeTracker.connect('hold', () => {
-                // Hold -> Play/Pause
-                getVirtualKeyboard().sendKeys([Clutter.KEY_AudioPlay]);
-            }),
+            this._horizontalTouchpadSwipeTracker.connect(
+                'hold',
+                (_gesture, _time, fingers) => {
+                    if (this._tapFingers.includes(fingers)) return;
+
+                    // Hold -> Play/Pause
+                    getVirtualKeyboard().sendKeys([Clutter.KEY_AudioPlay]);
+                }
+            ),
         ];
     }
 }

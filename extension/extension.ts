@@ -266,7 +266,7 @@ export default class TouchpadGestureCustomization extends Extension {
             this._extensions.push(
                 new PinchVolumeControlExtension(pinchVolumeControlFingers)
             );
-      
+
         // pinch to control keyboard backlight
         const pinchKeyboardControlFingers = pinchToFingersMap.get(
             PinchGestureType.KEYBOARD_BACKLIGHT_CONTROL
@@ -277,7 +277,6 @@ export default class TouchpadGestureCustomization extends Extension {
                     pinchKeyboardControlFingers
                 )
             );
-      
 
         /**
          * Tap Gestures

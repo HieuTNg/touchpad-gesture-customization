@@ -53,3 +53,4 @@ export const ExtSettings = {
 
 export const RELOAD_DELAY = 150; // reload extension delay in ms
 export const WIDGET_SHOWING_DURATION = 100; // animation duration for showing widget
+export const OSD_FRAMETIME_CAP_MS = 1000 / 30; // frametime lower limit for osd updates

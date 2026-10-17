@@ -4,36 +4,26 @@ import Gio from 'gi://Gio';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {SwipeTracker} from 'resource:///org/gnome/shell/ui/swipeTracker.js';
 import {createSwipeTracker} from './swipeTracker.js';
-import {ExtSettings, TouchpadConstants} from '../constants.js';
-
-const BRIGHTNESS_OSD_FPS_CAP_MS = 1000 / 30;
+import {
+    ExtSettings,
+    OSD_FRAMETIME_CAP_MS,
+    TouchpadConstants,
+} from '../constants.js';
 
 export class BrightnessControlGestureExtension implements ISubExtension {
     private _verticalSwipeTracker?: SwipeTracker;
     private _horizontalSwipeTracker?: SwipeTracker;
     private _verticalConnectHandlers?: number[];
     private _horizontalConnectHandlers?: number[];
-    private _manager?: typeof Main.brightnessManager;
     private _lastOsdShowTimestamp: number = 0;
-    private _managerChangedId: number | null = null;
+    private _originalOsdShow: typeof Main.osdWindowManager.show | null = null;
 
     apply() {
-        this._manager = Main.brightnessManager;
-
-        // Keep in sync if manager changes (defensive)
-        if (this._manager) {
-            this._managerChangedId = this._manager.connect('changed', () => {
-                // no-op: we read manager state when gestures start/update
-            });
-        }
+        this._patchShowOsd();
     }
 
     destroy(): void {
-        if (this._manager && this._managerChangedId !== null) {
-            this._manager.disconnect(this._managerChangedId);
-
-            this._managerChangedId = null;
-        }
+        this._restoreShowOsd();
 
         this._verticalConnectHandlers?.forEach(handle =>
             this._verticalSwipeTracker?.disconnect(handle)
@@ -55,7 +45,7 @@ export class BrightnessControlGestureExtension implements ISubExtension {
             Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW,
             Clutter.Orientation.VERTICAL,
             !ExtSettings.INVERT_BRIGHTNESS_DIRECTION,
-            TouchpadConstants.BRIGHTNESS_CONTROL_MULTIPLIER * 100,
+            TouchpadConstants.BRIGHTNESS_CONTROL_MULTIPLIER,
             {allowTouch: false}
         );
 
@@ -82,7 +72,7 @@ export class BrightnessControlGestureExtension implements ISubExtension {
             Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW,
             Clutter.Orientation.HORIZONTAL,
             !ExtSettings.INVERT_BRIGHTNESS_DIRECTION,
-            TouchpadConstants.BRIGHTNESS_CONTROL_MULTIPLIER * 100,
+            TouchpadConstants.BRIGHTNESS_CONTROL_MULTIPLIER,
             {allowTouch: false}
         );
 
@@ -102,56 +92,78 @@ export class BrightnessControlGestureExtension implements ISubExtension {
         ];
     }
 
-    _showOsd(brightness: number) {
+    // Changing brightness in Gnome 49+ is done via Main.brightnessManager._globalScale, which triggers an OSD
+    // This OSD has an animation that causes lag when the OSD is triggered frequently
+    // This patch allows to temporarily mute the stock OSD
+    // Muting is done via a flag instead of an empty lambda to prevent memory allocations and keep osdWindowManager shape optimization
+    private _patchShowOsd(): void {
+        const originalShow = Main.osdWindowManager.show;
+        Main.osdWindowManager._touchpadGestureCustomizationMuteShow = false;
+
+        Main.osdWindowManager.show = function (
+            this: typeof Main.osdWindowManager,
+            ...args: Parameters<typeof originalShow>
+        ): void {
+            if (this._touchpadGestureCustomizationMuteShow) {
+                return;
+            }
+
+            originalShow.apply(this, args);
+        };
+
+        this._originalOsdShow = originalShow;
+    }
+
+    private _restoreShowOsd(): void {
+        if (this._originalOsdShow) {
+            Main.osdWindowManager.show = this._originalOsdShow;
+            this._originalOsdShow = null;
+        }
+
+        delete Main.osdWindowManager._touchpadGestureCustomizationMuteShow;
+    }
+
+    _showOsd(level: number) {
         // If osd is updated too frequently, it may lag or freeze, so cap it to 30 fps
         const nowTimestamp = Date.now();
 
-        if (
-            nowTimestamp - this._lastOsdShowTimestamp <
-            BRIGHTNESS_OSD_FPS_CAP_MS
-        ) {
+        if (nowTimestamp - this._lastOsdShowTimestamp < OSD_FRAMETIME_CAP_MS) {
             return;
         }
 
         this._lastOsdShowTimestamp = nowTimestamp;
-
-        const level = brightness / 100;
 
         const icon = Gio.Icon.new_for_string('display-brightness-symbolic');
 
         Main.osdWindowManager.showAll(icon, null, level, 1);
     }
 
-    // Read current global brightness as 0..100
+    // Read current global brightness as 0..1
     get _brightness() {
-        if (!this._manager) return 0;
-
-        // globalScale is a scale object; its value is 0..1
-        const gs = this._manager._globalScale;
-        return gs ? Math.round(gs._value * 100) : 0;
+        return Main.brightnessManager._globalScale._value;
     }
 
-    // Set global brightness using manager; accepts 0..100
-    set _brightness(value) {
-        if (!this._manager) return;
-        const clamped = Math.max(0, Math.min(100, Math.round(value)));
-        this._manager._globalScale._setValue(clamped / 100);
+    // Set global brightness using manager; accepts 0..1
+    // No need to clamp as BrightnessScale already does that internally
+    set _brightness(value: number) {
+        Main.brightnessManager._globalScale._setValue(value);
     }
 
     _gestureBegin(_tracker: SwipeTracker): void {
         _tracker.confirmSwipe(
             global.screen_height,
-            [0, 100], // no snapping is needed as brightness change is continuous, but this will automatically clamp progress to [0, 100]
+            [0, 1], // no snapping is needed as brightness change is continuous, but this will automatically clamp progress to [0, 1]
             this._brightness, // current brightness
             0 // can be whatever
         );
     }
 
     _gestureUpdate(_tracker: SwipeTracker, progress: number): void {
-        // Round instead of truncating so that brightness changes sync exactly with extensions like "OSD Volume Number"
-        const brightness = Math.round(progress);
-        this._brightness = brightness;
-        this._showOsd(brightness);
+        Main.osdWindowManager._touchpadGestureCustomizationMuteShow = true;
+        this._brightness = progress;
+        Main.osdWindowManager._touchpadGestureCustomizationMuteShow = false;
+
+        this._showOsd(progress);
     }
 
     _gestureEnd(

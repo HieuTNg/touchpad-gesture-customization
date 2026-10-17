@@ -81,5 +81,7 @@ declare module 'resource:///org/gnome/shell/ui/main.js' {
             maxlevel: number
         ): void;
         hideAll(): void;
+        show(): void;
+        _touchpadGestureCustomizationMuteShow?: boolean;
     };
 }

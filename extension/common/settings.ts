@@ -8,6 +8,7 @@ export enum PinchGestureType {
     OPEN_CLOSE_DOCUMENT = 3,
     SHOW_NOTIFICATION_LIST = 4,
     VOLUME_CONTROL = 5,
+    KEYBOARD_BACKLIGHT_CONTROL = 6,
 }
 
 export enum VerticalSwipeGestureType {

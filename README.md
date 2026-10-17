@@ -20,7 +20,7 @@ This extension modifies and extends existing touchpad gestures on GNOME using Wa
 
 ### Manually
 
-**Note**: Please choose correct branch for your corresponding version of GNOME first. 
+**Note**: Please choose correct branch for your corresponding version of GNOME first.
 
 1. Install extension
 
@@ -54,13 +54,14 @@ gnome-extensions enable touchpad-gesture-customization@coooolapps.com
 | Brightness Control       | Increase/decrease system brightness          | 3/4/both | Vertical/Horizontal |
 | Media Control            | Play next/previous media, hold to play/pause | 3/4/both | Vertical/Horizontal |
 
-| Pinch Gesture Actions   | Description                                     | Fingers |
-| :---------------------- | :---------------------------------------------- | :------ |
-| Show Desktop (\*)       | Hide all application (i.e. windows), pinch out  | 3/4     |
-| Open/Close Window       | Open/Close an application, like clicking on "x" | 3/4     |
-| Open/Close Tab/Document | Open/Close a tab in application that uses tabs  | 3/4     |
-| Show Notification List  | Show GNOME notification                         | 3/4     |
-| Volume Control          | Increase/decrease system volume                 | 3/4     |
+| Pinch Gesture Actions      | Description                                     | Fingers |
+| :----------------------    | :---------------------------------------------- | :------ |
+| Show Desktop (\*)          | Hide all application (i.e. windows), pinch out  | 3/4     |
+| Open/Close Window          | Open/Close an application, like clicking on "x" | 3/4     |
+| Open/Close Tab/Document    | Open/Close a tab in application that uses tabs  | 3/4     |
+| Show Notification List     | Show GNOME notification                         | 3/4     |
+| Volume Control             | Increase/decrease system volume                 | 3/4     |
+| Keyboard Backlight Control | Increase/decrease keyboard backlight            | 3/4     |
 
 | Tap Gesture Actions    | Description                                     | Fingers |
 | :--------------------- | :---------------------------------------------- | :------ |
@@ -112,6 +113,9 @@ gnome-extensions enable touchpad-gesture-customization@coooolapps.com
 - Moving your fingers turns the tap into a swipe, so no tap action fires.
 - Media actions send the standard media keys, the same way Media Control does.
 - Setting a tap action turns off Media Control's play/pause on finger rest for the same number of fingers.
+
+#### Keyboard Backlight Notes
+- This will only work if you have a Keyboard Backlight tile in Gnome quick settings.
 
 #### Notes
 

@@ -4,6 +4,7 @@ import Gvc from 'gi://Gvc';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as Volume from 'resource:///org/gnome/shell/ui/status/volume.js';
 import {TouchpadPinchGesture} from './pinchTracker.js';
+import {OSD_FRAMETIME_CAP_MS} from '../../constants.js';
 
 const VolumeIcons = [
     'audio-volume-muted-symbolic',
@@ -75,7 +76,7 @@ export class PinchVolumeControlExtension implements ISubExtension {
     _showOsd(volume: number) {
         const nowTimestamp = Date.now();
 
-        if (nowTimestamp - this._lastOsdShowTimestamp < 1000 / 30) {
+        if (nowTimestamp - this._lastOsdShowTimestamp < OSD_FRAMETIME_CAP_MS) {
             return;
         }
 

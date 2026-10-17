@@ -11,6 +11,7 @@
             <item translatable="yes">Open/Close Tab (Ctrl + W)</item>
             <item translatable="yes">Show notification list</item>
             <item translatable="yes">Volume Control</item>
+            <item translatable="yes">Keyboard Backlight Control</item>
         </items>
     </object>
 

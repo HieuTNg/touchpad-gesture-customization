@@ -4,6 +4,7 @@ import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import {
     AllSettingsKeys,
     PinchGestureType,
+    TapGestureType,
     VerticalSwipeGestureType,
     HorizontalSwipeGestureType,
 } from './common/settings.js';
@@ -24,6 +25,7 @@ import {VolumeControlGestureExtension} from './src/volumeControl.js';
 import {BrightnessControlGestureExtension} from './src/brightnessControl.js';
 import {MediaControlGestureExtension} from './src/mediaControl.js';
 import {PinchVolumeControlExtension} from './src/pinchGestures/volumeControl.js';
+import {TapGestureExtension} from './src/tapGestures.js';
 import {PinchKeyboardBacklightControlExtension} from './src/pinchGestures/keyboardBacklightControl.js';
 
 export default class TouchpadGestureCustomization extends Extension {
@@ -264,7 +266,7 @@ export default class TouchpadGestureCustomization extends Extension {
             this._extensions.push(
                 new PinchVolumeControlExtension(pinchVolumeControlFingers)
             );
-
+      
         // pinch to control keyboard backlight
         const pinchKeyboardControlFingers = pinchToFingersMap.get(
             PinchGestureType.KEYBOARD_BACKLIGHT_CONTROL
@@ -274,6 +276,17 @@ export default class TouchpadGestureCustomization extends Extension {
                 new PinchKeyboardBacklightControlExtension(
                     pinchKeyboardControlFingers
                 )
+            );
+      
+
+        /**
+         * Tap Gestures
+         */
+
+        const tapFingersToGestureMap = this._getTapFingersAndGestureType();
+        if (tapFingersToGestureMap.size)
+            this._extensions.push(
+                new TapGestureExtension(tapFingersToGestureMap)
             );
 
         // TODO: consider having an option for 'hold and swipe gestures' that can either
@@ -382,7 +395,9 @@ export default class TouchpadGestureCustomization extends Extension {
             horizontalMediaControlFingers?.length
         ) {
             const mediaControlGestureExtension =
-                new MediaControlGestureExtension();
+                new MediaControlGestureExtension([
+                    ...tapFingersToGestureMap.keys(),
+                ]);
 
             if (verticalMediaControlFingers?.length) {
                 mediaControlGestureExtension.setVerticalSwipeTracker(
@@ -495,6 +510,25 @@ export default class TouchpadGestureCustomization extends Extension {
         }
 
         return gestureToFingersMap;
+    }
+
+    private _getTapFingersAndGestureType(): Map<number, TapGestureType> {
+        const fingersToGestureMap = new Map<number, TapGestureType>();
+        if (!this.settings) return fingersToGestureMap;
+
+        const tap3FingerGesture = this.settings.get_enum(
+            'tap-3-finger-gesture'
+        );
+        const tap4FingerGesture = this.settings.get_enum(
+            'tap-4-finger-gesture'
+        );
+
+        if (tap3FingerGesture !== TapGestureType.NONE)
+            fingersToGestureMap.set(3, tap3FingerGesture);
+        if (tap4FingerGesture !== TapGestureType.NONE)
+            fingersToGestureMap.set(4, tap4FingerGesture);
+
+        return fingersToGestureMap;
     }
 
     _initializeSettings() {

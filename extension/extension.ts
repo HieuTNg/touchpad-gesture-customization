@@ -23,6 +23,7 @@ import {OpenCloseWindowTabExtension} from './src/pinchGestures/openCloseWindowTa
 import {ShowNotificationListExtension} from './src/pinchGestures/showNotificationList.js';
 import {VolumeControlGestureExtension} from './src/volumeControl.js';
 import {BrightnessControlGestureExtension} from './src/brightnessControl.js';
+import {WindowDragGestureExtension} from './src/windowDrag.js';
 import {MediaControlGestureExtension} from './src/mediaControl.js';
 import {PinchVolumeControlExtension} from './src/pinchGestures/volumeControl.js';
 import {TapGestureExtension} from './src/tapGestures.js';
@@ -46,6 +47,7 @@ export default class TouchpadGestureCustomization extends Extension {
             'touchpad-pinch-speed',
             'volume-control-speed',
             'brightness-control-speed',
+            'window-drag-speed',
         ];
     }
 
@@ -379,6 +381,18 @@ export default class TouchpadGestureCustomization extends Extension {
         }
 
         /**
+         * Window Drag
+         */
+
+        const horizontalWindowDragFingers = horizontalSwipeToFingersMap.get(
+            HorizontalSwipeGestureType.WINDOW_DRAG
+        );
+        if (horizontalWindowDragFingers?.length)
+            this._extensions.push(
+                new WindowDragGestureExtension(horizontalWindowDragFingers)
+            );
+
+        /**
          * Media Control
          */
 
@@ -567,6 +581,9 @@ export default class TouchpadGestureCustomization extends Extension {
                 Constants.TouchpadConstants
                     .DEFAULT_BRIGHTNESS_CONTROL_MULTIPLIER *
                 this.settings.get_double('brightness-control-speed');
+            Constants.TouchpadConstants.WINDOW_DRAG_MULTIPLIER =
+                Constants.TouchpadConstants.DEFAULT_WINDOW_DRAG_MULTIPLIER *
+                this.settings.get_double('window-drag-speed');
             Constants.AltTabConstants.DELAY_DURATION =
                 this.settings.get_int('alttab-delay');
             Constants.TouchpadConstants.HOLD_SWIPE_DELAY_DURATION =

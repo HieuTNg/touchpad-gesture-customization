@@ -10,6 +10,10 @@ This extension modifies and extends existing touchpad gestures on GNOME using Wa
 - I have removed the support for X11 since I only use Wayland, but this can be added again in the future if needed and if someone is willing to support this.
 - There is a bug in GNOME 49 which break the extension, you have to upgrade to GNOME 49.3 or compile it from source for the extension to work again.
 
+## Compatibility
+
+The extension supports from GNOME Shell 45 onward. For older version of GNOME, please use [gnome-gesture-improvements](https://github.com/harshadgavali/gnome-gesture-improvements). Install the build from extensions.gnome.org that matches your shell version, or use the matching branch when installing from source.
+
 ## Installation
 
 ### From GNOME Extensions Website
@@ -121,6 +125,10 @@ gnome-extensions enable touchpad-gesture-customization@coooolapps.com
 
 - Enabling minimizing window gesture for Window Manipulation will disable snapping/tiling gesture.
 - If you are using an older version of GNOME, there might be a bug which prevent the extension from detecting **hold and swipe gesture** and **pinch gesture**. If you face this problem, the gesture can only work if the mouse pointer is pointed at the desktop or top panel.
+
+## Troubleshooting
+
+If you run into issues, check the [common issues](./docs/troubleshooting/common-issues.md.md) section for help before submitting a ticket.
 
 ## Customization
 

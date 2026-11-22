@@ -52,6 +52,7 @@
             <item translatable="yes">Volume Control</item>
             <item translatable="yes">Brightness Control</item>
             <item translatable="yes">Media Control</item>
+            <item translatable="yes">Window Drag</item>
         </items>
     </object>
 

@@ -30,6 +30,7 @@ export enum HorizontalSwipeGestureType {
     VOLUME_CONTROL = 4,
     BRIGHTNESS_CONTROL = 5,
     MEDIA_CONTROL = 6,
+    WINDOW_DRAG = 7,
 }
 
 export enum TapGestureType {
@@ -83,7 +84,8 @@ export type DoubleSettingsKeys =
     | 'touchpad-speed-scale'
     | 'touchpad-pinch-speed'
     | 'volume-control-speed'
-    | 'brightness-control-speed';
+    | 'brightness-control-speed'
+    | 'window-drag-speed';
 
 export type EnumSettingsKeys =
     | 'vertical-swipe-3-fingers-gesture'
@@ -114,7 +116,8 @@ export type AllUIObjectKeys =
     | 'touchpad-speed-scale_display-value'
     | 'touchpad-pinch-speed_display-value'
     | 'volume-control-speed_display-value'
-    | 'brightness-control-speed_display-value';
+    | 'brightness-control-speed_display-value'
+    | 'window-drag-speed_display-value';
 
 type Enum_Functions<K extends EnumSettingsKeys, T> = {
     get_enum(key: K): T;

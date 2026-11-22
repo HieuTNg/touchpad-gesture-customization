@@ -48,6 +48,7 @@
     <value value='4' nick='VOLUME_CONTROL' />
     <value value='5' nick='BRIGHTNESS_CONTROL' />
     <value value='6' nick='MEDIA_CONTROL' />
+    <value value='7' nick='WINDOW_DRAG' />
   </enum>
   <schema id="org.gnome.shell.extensions.touchpad-gesture-customization" path="/org/gnome/shell/extensions/touchpad-gesture-customization/">
     <!-- See also: https://docs.gtk.org/glib/gvariant-format-strings.html -->
@@ -61,6 +62,9 @@
       <default>1.0</default>
     </key>
     <key name="brightness-control-speed" type="d">
+      <default>1.0</default>
+    </key>
+    <key name="window-drag-speed" type="d">
       <default>1.0</default>
     </key>
     <key name="alttab-delay" type="i">

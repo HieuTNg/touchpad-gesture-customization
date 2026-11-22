@@ -12,11 +12,7 @@ This extension modifies and extends existing touchpad gestures on GNOME using Wa
 
 ## Compatibility
 
-The extension supports GNOME Shell 45 through 51. Install the build from
-extensions.gnome.org that matches your shell version, or use the matching
-branch when installing from source.
-
-Tested on **Ubuntu 26.10** with GNOME Shell 51.0 on Wayland.
+The extension supports from GNOME Shell 45 onward. For older version of GNOME, please use [gnome-gesture-improvements](https://github.com/harshadgavali/gnome-gesture-improvements). Install the build from extensions.gnome.org that matches your shell version, or use the matching branch when installing from source.
 
 ## Installation
 
@@ -132,31 +128,7 @@ gnome-extensions enable touchpad-gesture-customization@coooolapps.com
 
 ## Troubleshooting
 
-### The extension is installed but does not load
-
-GNOME Shell only scans extensions when the session starts. After a manual
-install, log out and log back in. On Wayland the shell cannot be restarted
-without ending the session, so the `ReloadExtension` D-Bus method is
-deprecated:
-
-```
-org.freedesktop.DBus.Error.NotSupported: ReloadExtension is deprecated and does not work
-```
-
-### Gestures stop working when an external mouse is connected
-
-GNOME can disable the touchpad while a mouse is present. Check the current
-setting:
-
-```
-gsettings get org.gnome.desktop.peripherals.touchpad send-events
-```
-
-If the value is `disabled-on-external-mouse`, enable the touchpad with:
-
-```
-gsettings set org.gnome.desktop.peripherals.touchpad send-events enabled
-```
+If you run into issues, check the [common issues](./docs/troubleshooting/common-issues.md.md) section for help before submitting a ticket.
 
 ## Customization
 
